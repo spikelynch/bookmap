@@ -1,0 +1,9 @@
+.polygons {
+  fill: #ffffff;
+}
+
+.cell {
+  stroke: #000;
+  stroke-opacity: 10%;
+  stroke-width: 0.5
+}
