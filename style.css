@@ -1,15 +1,40 @@
+#header {
+
+}
+
+#chart {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 600px;
+
+}
+
+#notes {
+    position: absolute;
+    top: 16px;
+    left: 640px;
+    width: 400px;
+}
+
+
 .polygons {
   fill: #ffffff;
 }
 
 .cell {
-  stroke: #000;
-  stroke-opacity: 10%;
-  stroke-width: 0.5
+    stroke: #000;
+    stroke-opacity: 10%;
+  stroke-width: .4
 }
 
 .link {
-  stroke: #fff;
-  stroke-opacity: 50%;
-  stroke-width: 0.5
-}    
+    stroke: #fff;
+    stroke-opacity: 20%;
+  stroke-width: .2
+}
+
+.node {
+    stroke-width: 0;
+    fill: #fff;
+}

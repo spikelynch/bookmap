@@ -4,6 +4,9 @@ CUTOFF = 0;
 PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
 
 
+
+
+
 function hilbert(i, max, order, side) {
     n = Math.pow(4, order);
     d1 = Math.floor(n * i / max);
