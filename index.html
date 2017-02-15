@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookmap: voronoi diagram with Hilbert coords</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="style.css" />
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="booklist.js"></script>
+    <script src="hilbert.js"></script> 
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<div id="chart">
+</div>
+<script type="text/javascript">
+
+var books = [];
+for ( var i = 0; i < 1000; i += 1 ) {
+    dd = Math.random() * 1000;
+
+    coords = hilbert(dd, 1000, 8, 480);
+
+    c = d3.hsl(360 * dd * 0.001, 1, 0.5).toString();
+
+    books.push( { "x": coords[0], "y": coords[1], "c": c });
+}
+
+
+width = 480;
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", width);
+
+
+
+
+var voronoi = d3.voronoi()
+.extent([[-1, -1], [width + 1, width + 1]])
+.x(function (d) { return d.x } )
+.y(function (d) { return d.y } );
+
+var polygon = svg.append("g")
+.attr("class", "polygons")
+.selectAll("path")
+.data(voronoi.polygons(books))
+.enter().append("path")
+  .attr("class", "cell")
+  .call(redrawPolygon);
+
+function redrawPolygon(polygon) {
+   polygon
+     .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+.attr("fill", function(d) {
+return d ? ( d.data ? d.data.c : null ) : null;
+})
+
+}
+
+
+
+
+
+</script>
+</body>
+</html>
