@@ -15,19 +15,22 @@
 </div>
 <script type="text/javascript">
 
-var books = [];
-for ( var i = 0; i < 1000; i += 1 ) {
-    dd = Math.random() * 1000;
+JITTER = 10;
 
-    coords = hilbert(dd, 1000, 8, 480);
-
-    c = d3.hsl(360 * dd * 0.001, 1, 0.5).toString();
-
-    books.push( { "x": coords[0], "y": coords[1], "c": c });
+function jitter(dewey) {
+    return dewey + ( Math.random() - 0.5 ) * JITTER;
 }
 
+width = 640;
 
-width = 480;
+
+var books = BOOKS.map(function (b) {
+    coords = hilbert(jitter(b.dd), 1000, 8, width);
+    c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
+    return { "x": coords[0], "y": coords[1], "c": c, "title": b.title,"dewey": b.dd };
+});
+
+
 
 
 var svg = d3.select("body").append("svg")
@@ -35,29 +38,29 @@ var svg = d3.select("body").append("svg")
     .attr("height", width);
 
 
-
+console.log("Number of books:", books.length);
 
 var voronoi = d3.voronoi()
 .extent([[-1, -1], [width + 1, width + 1]])
-.x(function (d) { return d.x } )
+.x(function (d) {
+console.log("voronoi access", d);
+return d.x
+} )
 .y(function (d) { return d.y } );
 
 var polygon = svg.append("g")
 .attr("class", "polygons")
 .selectAll("path")
 .data(voronoi.polygons(books))
-.enter().append("path")
+.enter()
+  .append("path")
   .attr("class", "cell")
-  .call(redrawPolygon);
-
-function redrawPolygon(polygon) {
-   polygon
-     .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
-.attr("fill", function(d) {
+  .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+  .attr("fill", function(d) {
+console.log("Fill poly", d);
 return d ? ( d.data ? d.data.c : null ) : null;
-})
+});
 
-}
 
 
 
