@@ -21,13 +21,13 @@ function jitter(dewey) {
     return dewey + ( Math.random() - 0.5 ) * JITTER;
 }
 
-width = 640;
+width = 600;
 
 
 var books = BOOKS.map(function (b) {
-    coords = hilbert(jitter(b.dd), 1000, 8, width);
+    coords = hilbert(b.dd, 1000, 8, width);
     c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
-    return { "x": coords[0], "y": coords[1], "c": c, "title": b.title,"dewey": b.dd };
+    return { "x": jitter(coords[0]), "y": jitter(coords[1]), "c": c, "title": b.title,"dewey": b.dd };
 });
 
 
@@ -43,7 +43,6 @@ console.log("Number of books:", books.length);
 var voronoi = d3.voronoi()
 .extent([[-1, -1], [width + 1, width + 1]])
 .x(function (d) {
-console.log("voronoi access", d);
 return d.x
 } )
 .y(function (d) { return d.y } );
@@ -51,15 +50,31 @@ return d.x
 var polygon = svg.append("g")
 .attr("class", "polygons")
 .selectAll("path")
-.data(voronoi.polygons(books))
-.enter()
+.data(voronoi.polygons(books));
+
+var links = svg.append("g")
+.attr("class", "links")
+.selectAll("line")
+.data(voronoi.links(books));
+
+
+polygon.enter()
   .append("path")
   .attr("class", "cell")
   .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
   .attr("fill", function(d) {
-console.log("Fill poly", d);
 return d ? ( d.data ? d.data.c : null ) : null;
 });
+
+links.enter()
+.append("line")
+.attr("class", "link")
+.attr("x1", function(d) { return d.source.x; })
+.attr("y1", function(d) { return d.source.y; })
+.attr("x2", function(d) { return d.target.x; })
+.attr("y2", function(d) { return d.target.y; });
+
+
 
 
 
