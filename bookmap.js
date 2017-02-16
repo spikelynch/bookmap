@@ -8,7 +8,7 @@ function jitter(dewey) {
 width = 600;
 
 
-var books = BOOKS.map(function (b) {
+var booklist = BOOKS.map(function (b) {
 //    coords = hilbert(b.dd, 1000, 8, width);
     coords = hbookmap(b.dd);
     c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
@@ -21,15 +21,26 @@ var books = BOOKS.map(function (b) {
 });
 
 
+var bookrnd = d3.range(200).map(function (b) {
+    d = Math.random() * 1000;
+    coords = hbookmap(d);
+    c = d3.hsl(360 * d * 0.001, 1, 0.76).toString();
+    return {
+        "x": jitter(coords[0]), "y": jitter(coords[1]),
+        "c": c,
+        "label": d,
+        "dewey": d
+    };
+});    
 
 
-function bookmap_static() {
+function bookmap_static(books) {
     var svg = d3.select("body").append("svg")
         .attr("id", "chart")
         .attr("width", width)
         .attr("height", width);
 
-    
+   
     var voronoi = d3.voronoi()
         .extent([[-1, -1], [width + 1, width + 1]])
         .x(function (d) { return d.x } )
@@ -64,13 +75,12 @@ function bookmap_static() {
 }
 
 
-function bookmap_dynamic () {
+function bookmap_dynamic (books) {
 
     var svg = d3.select("body").append("svg")
         .attr("id", "chart")
         .attr("width", width)
         .attr("height", width);
-
 
 
     var voronoi_start = d3.voronoi()
