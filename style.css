@@ -1,5 +1,8 @@
-#header {
-
+#nav {
+    position: absolute;
+    top: 8px;
+    left: 640px;
+    width: 400px;
 }
 
 #chart {
@@ -12,7 +15,7 @@
 
 #notes {
     position: absolute;
-    top: 16px;
+    top: 48px;
     left: 640px;
     width: 400px;
 }
