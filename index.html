@@ -7,6 +7,7 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="booklist.js"></script>
     <script src="hilbert.js"></script> 
+    <script src="bookmap.js"></script> 
     <style type="text/css">
     </style>
 </head>
@@ -31,72 +32,8 @@
 
 <script type="text/javascript">
 
-JITTER = 10;
 
-function jitter(dewey) {
-    return dewey + ( Math.random() - 0.5 ) * JITTER;
-}
-
-width = 600;
-
-
-var books = BOOKS.map(function (b) {
-//    coords = hilbert(b.dd, 1000, 8, width);
-    coords = hbookmap(b.dd);
-    c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
-    return { "x": jitter(coords[0]), "y": jitter(coords[1]), "c": c, "title": b.title,"dewey": b.dd };
-});
-
-
-
-
-var svg = d3.select("body").append("svg")
-    .attr("id", "chart")
-    .attr("width", width)
-    .attr("height", width);
-
-
-console.log("Number of books:", books.length);
-
-var voronoi = d3.voronoi()
-.extent([[-1, -1], [width + 1, width + 1]])
-.x(function (d) {
-return d.x
-} )
-.y(function (d) { return d.y } );
-
-var polygon = svg.append("g")
-.attr("class", "polygons")
-.selectAll("path")
-.data(voronoi.polygons(books));
-
-var links = svg.append("g")
-.attr("class", "links")
-.selectAll("line")
-.data(voronoi.links(books));
-
-
-polygon.enter()
-  .append("path")
-  .attr("class", "cell")
-  .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
-  .attr("fill", function(d) {
-return d ? ( d.data ? d.data.c : null ) : null;
-});
-
-links.enter()
-.append("line")
-.attr("class", "link")
-.attr("x1", function(d) { return d.source.x; })
-.attr("y1", function(d) { return d.source.y; })
-.attr("x2", function(d) { return d.target.x; })
-.attr("y2", function(d) { return d.target.y; });
-
-
-
-
-
-
+bookmap_static();
 
 
 </script>
