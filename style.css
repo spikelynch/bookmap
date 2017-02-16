@@ -28,7 +28,7 @@
 .cell {
     stroke: #000;
     stroke-opacity: 10%;
-  stroke-width: .4
+  stroke-width: 0
 }
 
 .link {
@@ -39,5 +39,4 @@
 
 .node {
     stroke-width: 0;
-    fill: #fff;
 }

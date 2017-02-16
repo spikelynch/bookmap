@@ -8,31 +8,29 @@ function jitter(dewey) {
 width = 600;
 
 
-var booklist = BOOKS.map(function (b) {
-//    coords = hilbert(b.dd, 1000, 8, width);
+function book2node(b) {
     coords = hbookmap(b.dd);
-    c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
+    hue = 360 * b.dd * 0.001;
+    cell_c = d3.hsl(hue, .75, 0.75).toString();
+    node_c = "#fff" //d3.hsl(hue, 1, .8).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
-        "c": c,
+        "cell_c": cell_c,
+        "node_c": node_c,
         "label": b.dd + " " + b.title,
         "dewey": b.dd
     };
+}
+
+
+var booklist = BOOKS.map(book2node);
+
+
+var bookrnd = d3.range(200).map(function(i) {
+    return book2node({ "dd": Math.random() * 1000, "title": "" });
 });
 
-
-var bookrnd = d3.range(200).map(function (b) {
-    d = Math.random() * 1000;
-    coords = hbookmap(d);
-    c = d3.hsl(360 * d * 0.001, 1, 0.76).toString();
-    return {
-        "x": jitter(coords[0]), "y": jitter(coords[1]),
-        "c": c,
-        "label": d,
-        "dewey": d
-    };
-});    
-
+console.log(bookrnd);
 
 function bookmap_static(books) {
     var svg = d3.select("body").append("svg")
@@ -60,7 +58,7 @@ function bookmap_static(books) {
         .append("path")
         .attr("class", "cell")
         .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
-        .attr("fill", function(d) { return d ? ( d.data ? d.data.c : null ) : null;})
+        .attr("fill", function(d) { return d ? ( d.data ? d.data.cell_c : null ) : null;})
         .append("title")
         .text(function(d) { return d ? ( d.data ? d.data.label : "" ) :"" });
 
@@ -94,14 +92,14 @@ function bookmap_dynamic (books) {
 
 
     var simulation = d3.forceSimulation()
-        .force("links", d3.forceLink().iterations(5))
+        .force("links", d3.forceLink().iterations(1))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, width / 2));
 
     simulation.velocityDecay(0.1);
     simulation.nodes(books);
     simulation.force("links").links(vlinks);
-    simulation.force("charge").strength(-4);
+    simulation.force("charge").strength(-1);
 
 
     // make a new voronoi to track the animation of the nodes
@@ -123,7 +121,7 @@ function bookmap_dynamic (books) {
         .enter()
         .append("path")
         .attr("class", "cell")
-        .attr("fill", function(d) {  return d ? ( d.data ? d.data.c : "#fff" ) : "#fff"; });
+        .attr("fill", function(d) {  return d ? ( d.data ? d.data.cell_c : "#fff" ) : "#fff"; });
     
 
     polygons.append("title")
@@ -143,12 +141,14 @@ function bookmap_dynamic (books) {
         .data(simulation.nodes()).enter()
         .append("circle")
         .attr("class", "node")
-        .attr("r", 3)
-        .call(d3.drag()
-              .on("start", dragstarted)
-              .on("drag", dragged)
-              .on("end", dragended));
+        .attr("fill", function (d) { return d.node_c; })
+        .attr("r", 3);
 
+
+    polygons.call(d3.drag()
+                  .on("start", dragstarted)
+                  .on("drag", dragged)
+                  .on("end", dragended));
 
 
     simulation.on("tick", function () {
@@ -163,26 +163,26 @@ function bookmap_dynamic (books) {
             .attr("y2", function(d) { return d.target.y; });
         
         nodes.attr("cx", function(d) { return d.x })
-            .attr("cy", function(d) { return d.y });
+             .attr("cy", function(d) { return d.y });
 
     });
 
 
     function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(.03).restart();
-        d.fx = d.x;
-        d.fy = d.y;
+        d.data.fx = d.data.x;
+        d.data.fy = d.data.y;
     }
     
     function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+        d.data.fx = d3.event.x;
+        d.data.fy = d3.event.y;
     }
     
     function dragended(d) {
         if (!d3.event.active) simulation.alphaTarget(.03);
-        d.fx = null;
-        d.fy = null;
+        d.data.fx = null;
+        d.data.fy = null;
     }
     
 }
