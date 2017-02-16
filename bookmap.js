@@ -94,14 +94,14 @@ function bookmap_dynamic (books) {
 
 
     var simulation = d3.forceSimulation()
-        .force("links", d3.forceLink().id(function(d) { return d.id }))
+        .force("links", d3.forceLink().iterations(5))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, width / 2));
 
     simulation.velocityDecay(0.1);
     simulation.nodes(books);
     simulation.force("links").links(vlinks);
-    simulation.force("charge").strength(-1);
+    simulation.force("charge").strength(-4);
 
 
     // make a new voronoi to track the animation of the nodes
