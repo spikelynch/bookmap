@@ -4,8 +4,15 @@ CUTOFF = 0;
 PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
 
 
+function hbookmap(i) {
+    scoords = _hilbert(i, 8);
+    coords = scoords.map(function (i) { return i * 9 });
+    return coords;
+}
 
 
+
+// This version is broken, but quite beautifully
 
 function hilbert(i, max, order, side) {
     n = Math.pow(4, order);
@@ -20,6 +27,9 @@ function _hilbert(i, order) {
     p = PATH.slice(0);
     return hilbert_r(i, order, 0, 0, p);
 }
+
+
+
 
 
 // i:      number we are converting to x, y

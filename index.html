@@ -13,7 +13,7 @@
 <body>
 <div id="notes">
   <p>Maps the Dewey decimal numbers to points in a square using the
-  <a href="hilbert.html">Hilbert Curve,</a> and then uses those
+  <a href="hilbert.html">Hilbert Curve,</a> and then use those
   coordinates to colour with a Voronoi map, adding a jitter factor so
   that books with the same number get slightly different
   coordinates.</p>
@@ -35,7 +35,8 @@ width = 600;
 
 
 var books = BOOKS.map(function (b) {
-    coords = hilbert(b.dd, 1000, 8, width);
+//    coords = hilbert(b.dd, 1000, 8, width);
+    coords = hbookmap(b.dd);
     c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
     return { "x": jitter(coords[0]), "y": jitter(coords[1]), "c": c, "title": b.title,"dewey": b.dd };
 });

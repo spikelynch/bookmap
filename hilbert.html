@@ -25,7 +25,7 @@
 <script type="text/javascript">
 
 function hcolour(dd) {
-    return d3.hsl(360 * dd * 0.001, 1, 0.76).toString();
+    return d3.hsl(360 * dd /1024, 1, 0.76).toString();
 }
 
 
@@ -38,12 +38,16 @@ var svg = d3.select("body").append("svg")
 
 lcoords = []
 
-for( var i = 0; i < 1023; i++ ) {
-    coords = hilbert(i, 718, 8, 600);
+for( var i = 0; i < 1000; i++ ) {
+//    scoords = _hilbert(i, 8);
+//    coords = scoords.map(function (i) { return i * 9 });
+//    coords = hilbert(i, 1024, 8, 600);
+      coords = hbookmap(i);
     if( lcoords ) {
  svg.append("line")
 .attr("class", "map")
-.attr("stroke", "#000")
+.attr("stroke", hcolour(i))
+.attr("stroke-width", 10)
 .attr("x1", lcoords[0])
 .attr("y1", lcoords[1])
 .attr("x2", coords[0])

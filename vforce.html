@@ -15,8 +15,8 @@
 <div id="notes">
   <p>Uses the <a href="index.html">static version</a> as the basis
   for a force-directed graph, using the Delaunay triangulation to
-  build links. This loses the Hilbert mapping in terms of position,
-  but the links preserve the closeness of nodes which are near one
+  build links. The graph moves quickly away from the initial <a href="hilbert.html">Hilbert mapping</a>,
+  but the Delaunay links preserve the closeness of nodes which are near one
   another in Dewey-space.</p>
   
 
@@ -35,7 +35,8 @@ width = 600;
 radius = 3;
 
 var books = BOOKS.map(function (b) {
-    coords = hilbert(b.dd, 1000, 8, width);
+    coords = hbookmap(b.dd);
+//    coords = hilbert(b.dd, 1000, 8, width);
     c = d3.hsl(360 * b.dd * 0.001, 1, 0.76).toString();
 return {
 "x": jitter(coords[0]),
