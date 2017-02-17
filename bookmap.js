@@ -1,6 +1,8 @@
 
 JITTER = 10;
 
+RADIUS = 3;
+
 function jitter(dewey) {
     return dewey + ( Math.random() - 0.5 ) * JITTER;
 }
@@ -142,7 +144,7 @@ function bookmap_dynamic (books) {
         .append("circle")
         .attr("class", "node")
         .attr("fill", function (d) { return d.node_c; })
-        .attr("r", 3);
+        .attr("r", RADIUS);
 
 
     polygons.call(d3.drag()

@@ -39,4 +39,5 @@
 
 .node {
     stroke-width: 0;
+    pointer-events: none;
 }
