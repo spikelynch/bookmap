@@ -84,24 +84,8 @@ function bookmap_static(books) {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    // an invisible rect over the svg with a zoom behaviour
-    // from https://bl.ocks.org/mbostock/4e3925cdc804db257a86fdef3a032a45
 
-
-    svg.append("rect")
-        .attr("width", WIDTH)
-        .attr("height", HEIGHT)
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .call(d3.zoom()
-              .scaleExtent(ZOOM_EXTENT)
-              .on("zoom", function () {
-                  console.log("Zoom" + d3.event.transform);
-                  chart.attr("transform", d3.event.transform)
-              }
-    ));
-
-
+    add_zoom(svg, chart);
 
 }
 
@@ -146,12 +130,13 @@ function bookmap_dynamic (books) {
         .x(function (d) { return d.x } )
         .y(function (d) { return d.y } );
 
+    var chart = svg.append("g");
     
-    var voronoiGroup = svg.append("g")
+    var voronoiGroup = chart.append("g")
         .attr("class", "voronoi");
 
 
-    var polygons = svg.append("g")
+    var polygons = chart.append("g")
         .attr("class", "polygons")
         .selectAll("path")
         .data(voronoi(simulation.nodes()).polygons())
@@ -164,7 +149,7 @@ function bookmap_dynamic (books) {
     polygons.append("title")
         .text(function(d) { return d ? ( d.data ? d.data.label : "" ) :"" });
     
-    var links = svg.append("g")
+    var links = chart.append("g")
         .attr("class", "links")
         .selectAll("line")
         .data(voronoi.links(books)).enter()
@@ -172,7 +157,7 @@ function bookmap_dynamic (books) {
         .attr("class", "link");
     
 
-    var nodes = svg.append("g")
+    var nodes = chart.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(simulation.nodes()).enter()
@@ -187,6 +172,7 @@ function bookmap_dynamic (books) {
                   .on("drag", dragged)
                   .on("end", dragended));
 
+    add_zoom(svg, chart);
 
     simulation.on("tick", function () {
         polygons
@@ -223,3 +209,31 @@ function bookmap_dynamic (books) {
     }
     
 }
+
+
+// an invisible rect over the svg with a zoom behaviour
+// from https://bl.ocks.org/mbostock/4e3925cdc804db257a86fdef3a032a45
+
+
+function add_zoom(svg, chart) {
+    svg.call(d3.zoom()
+             .scaleExtent(ZOOM_EXTENT)
+             .on("zoom", function () {
+                 console.log("Zoom" + d3.event.transform);
+                 chart.attr("transform", d3.event.transform)
+             }
+                ));
+    // svg.append("rect")
+    //     .attr("width", WIDTH)
+    //     .attr("height", HEIGHT)
+    //     .style("fill", "none")
+    //     .style("pointer-events", "all")
+    //     .call(d3.zoom()
+    //           .scaleExtent(ZOOM_EXTENT)
+    //           .on("zoom", function () {
+    //               console.log("Zoom" + d3.event.transform);
+    //               chart.attr("transform", d3.event.transform)
+    //           }
+    //              ));
+}
+    
