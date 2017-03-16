@@ -4,14 +4,23 @@
     <title>Bookmap: voronoi diagram with Hilbert coords</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link rel="stylesheet" href="style.css" />
+    <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="booklist.js"></script>
+    <script src="Lists/elephants.js"></script>
     <script src="hilbert.js"></script> 
     <script src="bookmap.js"></script> 
+    <script src="example_voronoi.js"></script> 
+    <script src="search.js"></script> 
     <style type="text/css">
     </style>
 </head>
 <body>
+
+<div id="chart">
+</div>
 
 <div id="nav">
   <p><b>Static</b> | <a
@@ -27,6 +36,9 @@
   coordinates.</p>
 
   <p><a href="vforce.html">Force-directed graph version</a></p>
+
+
+  <div id="status"></div>
 
 
 </div>

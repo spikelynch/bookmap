@@ -6,3 +6,9 @@ Try this with a force map
 - DEWEY - Author - title
 
 to try and reveal clustering at a discipline level
+
+
+## Endeca JSON search
+
+{
+    
