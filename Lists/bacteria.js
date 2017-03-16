@@ -1,4 +1,4 @@
-BOOKS = [
+[
     {
         "dd": 579.3,
         "title": "Have bacteria won?",

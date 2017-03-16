@@ -9,11 +9,9 @@
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="Lists/elephants.js"></script>
     <script src="hilbert.js"></script> 
     <script src="bookmap.js"></script> 
-    <script src="example_voronoi.js"></script> 
-    <script src="search.js"></script> 
+    <script src="lists.js"></script>
     <style type="text/css">
     </style>
 </head>
@@ -35,8 +33,8 @@
   that books with the same number get slightly different
   coordinates.</p>
 
-  <p><a href="vforce.html">Force-directed graph version</a></p>
-
+  <form name="controls">
+  </form>
 
   <div id="status"></div>
 
@@ -45,8 +43,7 @@
 
 <script type="text/javascript">
 
-
-bookmap_static(booklist);
+setup_lists(bookmap_static);
 
 
 </script>

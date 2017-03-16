@@ -1,4 +1,4 @@
-BOOKS = [
+[
     {
         "dd": 5.3,
         "title": "Docker containers : build and deploy with Kubernetes, Flannel, Cockpit, and Atomic",

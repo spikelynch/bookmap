@@ -1,4 +1,4 @@
-BOOKS = [
+[
     {
         "dd": 796.334,
         "title": "The SBS complete book of football",

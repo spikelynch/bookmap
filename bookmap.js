@@ -36,7 +36,7 @@ function book2node(b) {
 }
 
 
-var booklist = BOOKS.map(book2node);
+//var booklist = BOOKS.map(book2node);
 
 
 var bookrnd = d3.range(200).map(function(i) {

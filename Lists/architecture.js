@@ -1,4 +1,4 @@
-BOOKS = [
+[
     {
         "dd": 720.4,
         "title": "The ten most influential buildings in history : architecture's archetypes",
