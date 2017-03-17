@@ -55,6 +55,7 @@ var bookrnd2 = d3.range(200).map(function(i) {
 
 function bookmap_static(books) {
     d3.select("svg").remove();
+
     var cdiv = d3.select("#chart");
     
     var svg = cdiv.append("svg")
@@ -106,8 +107,11 @@ function bookmap_static(books) {
 
 
 function bookmap_dynamic (books) {
+    d3.select("svg").remove();
 
-    var svg = d3.select("body").append("svg")
+    var cdiv = d3.select("#chart");
+
+    var svg = cdiv.append("svg")
         .attr("id", "chart")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
