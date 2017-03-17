@@ -24,6 +24,8 @@ function setup_lists(chart_fn) {
         .attr("type", "button")
         .on("click", render);
 
+    render();
+    
     function render() {
         var option = dd.property("value");
         console.log("Load", option);
