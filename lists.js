@@ -4,7 +4,8 @@ LISTS = [
     { label: "football (search)", file: "football2.js" },
     { label: "atomic", file: "atomic.js" },
     { label: "bacteria", file: "bacteria.js" },
-    { label: "elephants", file: "elephants.js" }
+    { label: "elephants", file: "elephants.js" },
+    { label: "quantum", file: "blorp.js" }
 //    { label: "architecture (warning: HUGE)", file: "architecture.js" }
 ];
 

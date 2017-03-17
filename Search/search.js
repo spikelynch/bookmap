@@ -4,7 +4,7 @@ var request = require('request');
 
 var SEARCH_URL = "http://discovery.lib.uts.edu.au/discovery/endeca";
 
-var PAGE = 25;
+var PAGE = 500;
 
 var books = [];
 
