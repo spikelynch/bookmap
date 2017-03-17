@@ -1,8 +1,10 @@
 
-ZOOM_EXTENT = [ 1, 40 ];
+ZOOM_EXTENT = [ 0.25, 80 ];
+
+
 
 JITTER = 10;
-RADIUS = 3;
+RADIUS = 1;
 
 function jitter(dewey) {
     return dewey + ( Math.random() - 0.5 ) * JITTER;
@@ -11,12 +13,19 @@ function jitter(dewey) {
 WIDTH = 600;
 HEIGHT = 600;
 
+VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
+
 
 function book2node(b) {
+    // - go through the list
+    // - for each dewey number with more than one title, count how many 
+    //   are on that number, and find the next dewey number
+    // - take the title (and author) and map them to a distribution between
+    //   the lower and upper bounds, and then use that value as the 1-d coord
     coords = hbookmap(b.dd);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, .8, .8).toString();
+    node_c = "#fff"; //d3.hsl(hue, .8, .8).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
@@ -27,7 +36,7 @@ function book2node(b) {
 }
 
 
-var booklist = BOOKS.map(book2node);
+//var booklist = BOOKS.map(book2node);
 
 
 var bookrnd = d3.range(200).map(function(i) {
@@ -45,13 +54,16 @@ var bookrnd2 = d3.range(200).map(function(i) {
 
 
 function bookmap_static(books) {
-    var svg = d3.select("body").append("svg")
+    d3.select("svg").remove();
+    var cdiv = d3.select("#chart");
+    
+    var svg = cdiv.append("svg")
         .attr("id", "chart")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
    
     var voronoi = d3.voronoi()
-        .extent([[-1, -1], [WIDTH + 1, HEIGHT + 1]])
+        .extent(VORO_EXTENT)
         .x(function (d) { return d.x } )
         .y(function (d) { return d.y } );
 
@@ -102,7 +114,7 @@ function bookmap_dynamic (books) {
 
 
     var voronoi_start = d3.voronoi()
-        .extent([[-1, -1], [WIDTH + 1, HEIGHT + 1]])
+        .extent(VORO_EXTENT)
         .x(function (d) { return d.x } )
         .y(function (d) { return d.y } );
     
@@ -119,14 +131,14 @@ function bookmap_dynamic (books) {
     simulation.velocityDecay(0.1);
     simulation.nodes(books);
     simulation.force("links").links(vlinks);
-    simulation.force("charge").strength(-1);
+    simulation.force("charge").strength(-.5);
 
 
     // make a new voronoi to track the animation of the nodes
     // (the first one was just to get the delaunay links)
 
     var voronoi = d3.voronoi()
-        .extent([[-1, -1], [WIDTH + 1, HEIGHT + 1]])
+        .extent(VORO_EXTENT)
         .x(function (d) { return d.x } )
         .y(function (d) { return d.y } );
 
@@ -174,6 +186,7 @@ function bookmap_dynamic (books) {
 
     add_zoom(svg, chart);
 
+
     simulation.on("tick", function () {
         polygons
             .data(voronoi(simulation.nodes()).polygons())
@@ -219,7 +232,6 @@ function add_zoom(svg, chart) {
     svg.call(d3.zoom()
              .scaleExtent(ZOOM_EXTENT)
              .on("zoom", function () {
-                 console.log("Zoom" + d3.event.transform);
                  chart.attr("transform", d3.event.transform)
              }
                 ));

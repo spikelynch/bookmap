@@ -1,5 +1,4 @@
-
-BOOKS = [
+[
     {
         "dd": 796.33,
         "title": "Football"

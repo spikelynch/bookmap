@@ -5,9 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link rel="stylesheet" href="style.css" />
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="booklist.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
     <script src="hilbert.js"></script> 
     <script src="bookmap.js"></script>
+    <script src="lists.js"></script>
     <style type="text/css">
     </style>
 </head>
@@ -26,16 +30,15 @@
   href="hilbert.html">Hilbert mapping</a>, but there are more links
   between nodes with near Dewey numbers, so they cluster together.</p>
 
-  <p>The same visualisation with <a
-  href="vforce_random.html">200 random values</a> generates a uniform
-  (but still jumbled) mesh.</p>
-
+  <form name="controls">
+  </form>
 
 </div>
 
 <script type="text/javascript">
 
-bookmap_dynamic(booklist);
+setup_lists(bookmap_dynamic);
+
 
 
 
