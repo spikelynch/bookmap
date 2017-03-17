@@ -4,7 +4,8 @@ ZOOM_EXTENT = [ 0.25, 80 ];
 
 
 JITTER = 10;
-RADIUS = 1;
+RADIUS = 2;
+CHARGE = 100;
 
 function jitter(dewey) {
     return dewey + ( Math.random() - 0.5 ) * JITTER;
@@ -25,7 +26,7 @@ function book2node(b) {
     coords = hbookmap(b.dd);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = "#fff"; //d3.hsl(hue, .8, .8).toString();
+    node_c = d3.hsl(hue, .9, 1).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
@@ -36,21 +37,7 @@ function book2node(b) {
 }
 
 
-//var booklist = BOOKS.map(book2node);
 
-
-var bookrnd = d3.range(200).map(function(i) {
-    return book2node({ "dd": Math.random() * 1000, "title": "" });
-});
-
-// "lost marbles"
-var bookrnd3 = d3.range(200).map(function(i) {
-    return book2node({ "dd": (Math.random() + Math.random() ) * 1000, "title": "" });
-});
-
-var bookrnd2 = d3.range(200).map(function(i) {
-    return book2node({ "dd": (Math.random() + Math.random() ) * 500, "title": "" });
-});
 
 
 function bookmap_static(books) {
@@ -135,7 +122,7 @@ function bookmap_dynamic (books) {
     simulation.velocityDecay(0.1);
     simulation.nodes(books);
     simulation.force("links").links(vlinks);
-    simulation.force("charge").strength(-.5);
+    simulation.force("charge").strength(-CHARGE / books.length);
 
 
     // make a new voronoi to track the animation of the nodes

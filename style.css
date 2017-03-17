@@ -20,6 +20,9 @@
     width: 400px;
 }
 
+#status {
+    margin-top: 20px;
+}
 
 .polygons {
   fill: #ffffff;
