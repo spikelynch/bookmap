@@ -6,9 +6,9 @@ LISTS = [
     { label: "bacteria", file: "bacteria.js" },
     { label: "elephants", file: "elephants.js" },
     { label: "quantum", file: "quantum.js" },
+    { label: "architecture (warning: HUGE)", file: "architecture.js" },
     { label: "random 200", file: "200" },
     { label: "random 1000", file: "1000" },
-//    { label: "architecture (warning: HUGE)", file: "architecture.js" }
 ];
 
 
