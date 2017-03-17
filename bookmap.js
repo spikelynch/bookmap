@@ -96,7 +96,6 @@ function bookmap_static(books) {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    $("#status").text("Loaded " + books.length + " books");
 
     add_zoom(svg, chart);
 
@@ -187,7 +186,6 @@ function bookmap_dynamic (books) {
 
     add_zoom(svg, chart);
 
-    $("#status").text("Loaded " + books.length + " books");
 
     simulation.on("tick", function () {
         polygons
