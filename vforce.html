@@ -4,6 +4,7 @@
     <title>Bookmap: voronoi diagram with Hilbert coords</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="controls.css" />
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script
         src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -12,8 +13,7 @@
     <script src="hilbert.js"></script> 
     <script src="bookmap.js"></script>
     <script src="lists.js"></script>
-    <style type="text/css">
-    </style>
+    <script src="controls.js"></script>
 </head>
 <body>
 
@@ -36,19 +36,35 @@
     catalogue for keywords, plus two datasets of evenly distributed
     random numbers.</p>
 
+</div>
+
+<div id="search">
   <form name="controls">
   </form>
+</div>
 
-    <div id="status"></div>
+<div id="controls">
 
 </div>
+
+<div id="status"></div>
 
 <script type="text/javascript">
 
 setup_lists(bookmap_dynamic);
 
+var csvg = d3.select("#controls").append("svg")
+    .attr("width", 400)
+.attr("height", 240);
 
+console.log("Added control svg: " + csvg);
 
+make_ctrl(csvg, 0, [ 1, 200 ],  function(v) {
+    console.log("control callback: " + v);
+bookmap_controls.charge(v);
+});
+
+console.log("Made control for charge");
 
 </script>
 </body>

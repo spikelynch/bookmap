@@ -17,6 +17,10 @@ HEIGHT = 600;
 VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 
+// global var where the dynamic bookmap puts control callbacks
+
+var bookmap_controls = {};
+
 function book2node(b) {
     // - go through the list
     // - for each dewey number with more than one title, count how many 
@@ -41,12 +45,12 @@ function book2node(b) {
 
 
 function bookmap_static(books) {
-    d3.select("svg").remove();
+    d3.select("#chartsvg").remove();
 
     var cdiv = d3.select("#chart");
     
     var svg = cdiv.append("svg")
-        .attr("id", "chart")
+        .attr("id", "chartsvg")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
    
@@ -94,12 +98,12 @@ function bookmap_static(books) {
 
 
 function bookmap_dynamic (books) {
-    d3.select("svg").remove();
+    d3.select("#chartsvg").remove();
 
     var cdiv = d3.select("#chart");
 
     var svg = cdiv.append("svg")
-        .attr("id", "chart")
+        .attr("id", "chartsvg")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
 
@@ -178,6 +182,15 @@ function bookmap_dynamic (books) {
     add_zoom(svg, chart);
 
 
+    // callbacks to be driven by the controls
+    
+    bookmap_controls.charge = function (v) {
+        var charge = -v;
+        console.log("Setting charge to " + charge);
+        simulation.force("charge").strength(charge);
+     //   simulation.restart();
+    };
+            
     simulation.on("tick", function () {
         polygons
             .data(voronoi(simulation.nodes()).polygons())
@@ -211,7 +224,7 @@ function bookmap_dynamic (books) {
         d.data.fx = null;
         d.data.fy = null;
     }
-    
+
 }
 
 
