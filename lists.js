@@ -45,9 +45,10 @@ function setup_lists(chart_fn) {
         } else {
             var n = parseInt(option);
             if( n ) {
-                var booklist = d3.range(n).map(function(i) {
-                    return book2node({ "dd": Math.random() * 1000, "title": "" });
-                });
+                var booklist = d3.range(n).map(function(i)
+                // var booklist = d3.range(n).map(function(i) {
+                //     return book2node({ "dd": Math.random() * 1000, "title": "" });
+                // });
                 chart_fn(booklist);
             }
         }

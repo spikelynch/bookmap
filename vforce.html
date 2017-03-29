@@ -57,14 +57,11 @@ var csvg = d3.select("#controls").append("svg")
     .attr("width", 400)
 .attr("height", 240);
 
-console.log("Added control svg: " + csvg);
 
-make_ctrl(csvg, 0, [ 1, 200 ],  function(v) {
-    console.log("control callback: " + v);
-bookmap_controls.charge(v);
+make_ctrl(csvg, 2, [ 1, 100 ], function(v) {
+    bookmap_controls.charge(v)
 });
 
-console.log("Made control for charge");
 
 </script>
 </body>
