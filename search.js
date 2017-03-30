@@ -8,6 +8,8 @@ PAGE = 25
 
 var results = [];
 
+
+
 function do_search() {
     query = $("#query").val();
     
@@ -17,6 +19,8 @@ function do_search() {
 
 }
 
+// this should take a callback as argument which updates a progress indicator
+// and despatches sets of results to the visualisation
 
 function get_results(query, offset) {
     var url = SEARCH_URL + "?q=" + query + "&limit=" + PAGE + "&offset=" + offset;
