@@ -8,6 +8,7 @@ PAGE = 25
 
 var results = [];
 
+var DD_RE = /^(\d+\.\d+)/;
 
 
 function do_search() {
