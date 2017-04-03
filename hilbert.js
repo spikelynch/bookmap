@@ -1,15 +1,31 @@
 
-CUTOFF = 0;
+var CUTOFF = 0;
 
-PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
+var PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
 
+var ORDER;
+var SCALE_1D;
+var SCALE_2D;
+
+function hilbert_init(o, size) {
+    ORDER = o;
+    SCALE_1D = Math.pow(4, ORDER);
+    SCALE_2D = size / Math.pow(2, ORDER);
+}
 
 function hbookmap(i) {
-    scoords = _hilbert(i, 8);
-    coords = scoords.map(function (i) { return i * 9 });
+    var v = i * SCALE_1D;
+    var scoords = _hilbert(v, ORDER);
+    var coords = scoords.map(function (x) { return x * SCALE_2D / 2 });
+//    console.log(v, scoords, coords);
     return coords;
 }
 
+function hbookmap2(i) {
+    var scoords = _hilbert(i, ORDER);
+    var coords = scoords.map(function (x) { return x * SCALE_2D / 2 });
+    return coords;
+}
 
 
 // This version is broken, but quite beautifully
@@ -45,7 +61,6 @@ function hilbert_r(i, o, x0, y0, path) {
     n = side * side;
     seg = n / 4;
     s = Math.floor(i / seg);
-    //console.log(o, n, i, seg, s, path);
     x = x0 + path[s][0] * side;
     y = y0 + path[s][1] * side;
     
@@ -64,13 +79,42 @@ function hilbert_r(i, o, x0, y0, path) {
 }
 
 
-function hilbert_test(n) {
-    r = []
-    for ( var i = 0; i < n; i++ ) {
-        //d = Math.floor(Math.random() * 1024);
-        coords = hilbert_r(i, 5, 0, 0, PATH);
-        console.log(i, coords);
+
+
+function hcolour(dd) {
+    console.log(360 * dd);
+    return d3.hsl(360 * dd, 1, 0.5).toString();
+}
+
+
+function hilbert_demo(order) {
+    var width = 1000;
+
+    var svg = d3.select("body").append("svg")
+        .attr("id", "chart")
+        .attr("width", width * 2)
+        .attr("height", width * 2);
+
+    hilbert_init(12, width);
+    
+    var h = SCALE_1D;
+    var cw = 10;
+
+    for( var i = 0; i < 1000; i += 1 ) {
+        var p = Math.random();
+        var coords = hbookmap2(p * h);
+        var c = hcolour(p);
+        svg.append("rect")
+            .attr("class", "demo")
+            .attr("fill", c)
+            .attr("stroke-width", 0)
+            .attr("x", coords[0])
+            .attr("y", coords[1])
+            .attr("width", cw)
+            .attr("height", cw);
+        // svg.append("text")
+        //     .attr("x", coords[0] + 10)
+        //     .attr("y", coords[1] + 16)
+        //     .text(i);
     }
-//    console.log(r);
- //   return r;
 }

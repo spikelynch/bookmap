@@ -17,6 +17,10 @@ HEIGHT = 600;
 VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 
+// global var where the dynamic bookmap puts control callbacks
+
+var bookmap_controls = {};
+
 function book2node(b) {
     // - go through the list
     // - for each dewey number with more than one title, count how many 
@@ -25,8 +29,8 @@ function book2node(b) {
     //   the lower and upper bounds, and then use that value as the 1-d coord
     coords = hbookmap(b.dd);
     hue = 360 * b.dd * 0.001;
-    cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, .9, 1).toString();
+    cell_c = d3.hsl(hue, .65, 0.5).toString();
+    node_c = d3.hsl(hue, .9, .8).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
@@ -41,12 +45,12 @@ function book2node(b) {
 
 
 function bookmap_static(books) {
-    d3.select("svg").remove();
+    d3.select("#chartsvg").remove();
 
     var cdiv = d3.select("#chart");
     
     var svg = cdiv.append("svg")
-        .attr("id", "chart")
+        .attr("id", "chartsvg")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
    
@@ -94,12 +98,12 @@ function bookmap_static(books) {
 
 
 function bookmap_dynamic (books) {
-    d3.select("svg").remove();
+    d3.select("#chartsvg").remove();
 
     var cdiv = d3.select("#chart");
 
     var svg = cdiv.append("svg")
-        .attr("id", "chart")
+        .attr("id", "chartsvg")
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
 
@@ -178,6 +182,26 @@ function bookmap_dynamic (books) {
     add_zoom(svg, chart);
 
 
+    // callbacks to be driven by the controls
+    
+    bookmap_controls.charge = function (charge) {
+        console.log("Setting charge to " + charge);
+        simulation.force("charge").strength(-charge);
+    };
+
+    bookmap_controls.alpha = function (alpha) {
+        console.log("Setting alpha to " + alpha);
+        simulation.alphaDecay(alpha);
+        simulation.restart();
+    };
+
+    bookmap_controls.velocity = function (velocity) {
+        console.log("Setting velocity to " + velocity);
+        simulation.velocityDecay(velocity);
+        simulation.restart();
+    };
+
+    
     simulation.on("tick", function () {
         polygons
             .data(voronoi(simulation.nodes()).polygons())
@@ -211,7 +235,7 @@ function bookmap_dynamic (books) {
         d.data.fx = null;
         d.data.fy = null;
     }
-    
+
 }
 
 
