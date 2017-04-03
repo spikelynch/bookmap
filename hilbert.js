@@ -1,12 +1,20 @@
 
-CUTOFF = 0;
+var CUTOFF = 0;
 
-PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
+var PATH = [ [0, 0], [0, 1], [1, 1], [1, 0 ] ];   
 
+var ORDER = 6;
+var SCALE_1D = Math.pow(4, ORDER);
+var SCALE_2D = 300.0 / Math.pow(2, ORDER);
+
+console.log(SCALE_1D);
+console.log(SCALE_2D);
 
 function hbookmap(i) {
-    scoords = _hilbert(i, 8);
-    coords = scoords.map(function (i) { return i * 9 });
+    var v = i * SCALE_1D;
+    var scoords = _hilbert(v, ORDER);
+    var coords = scoords.map(function (x) { return x * SCALE_2D });
+//    console.log(v, scoords, coords);
     return coords;
 }
 

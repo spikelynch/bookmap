@@ -4,15 +4,18 @@ var request = require('request');
 
 var SEARCH_URL = "http://discovery.lib.uts.edu.au/discovery/endeca";
 
-var PAGE = 500;
+var PAGE = 100;
 
 var books = [];
+
+var BOOK_TYPE = '4294967266';
 
 var DD_RE = /^(\d+\.\d+)/;
 
 var args = process.argv.slice(2);
 
 function is_book(doc) {
+    return true;
     //console.log(doc);
     for( var i = 0; i < doc.dimensions.length; i++ ) {
         var d = doc.dimensions[i];
@@ -71,13 +74,14 @@ function print_results() {
 }
 
 function get_results(query, offset) {
-    var url = SEARCH_URL + "?q=" + query + "&limit=" + PAGE + "&offset=" + offset;
+    var url = SEARCH_URL + "?N=" + BOOK_TYPE + "&Ntt=" + query + "&limit=" + PAGE + "&offset=" + offset;
 
     request.get(url, function(error, response, body) {
-//        console.log(url);
+        console.log(url);
         if( response && response.statusCode == "200" ) {
             json = JSON.parse(body);
             docset = json.data.documentSet;
+            console.warn("offset = " + offset + "; results = " + docset.docs.length);
             handle_docs(docset.docs);
             if( offset + PAGE < docset.totalHits ) {
                 console.warn(offset + " of " + docset.totalHits);
@@ -86,7 +90,7 @@ function get_results(query, offset) {
                 print_results();
             }
         } else {
-//            console.log("Status = " + r.statusCode);
+            console.log("Status = " + response.statusCode);
         }
     });
 }

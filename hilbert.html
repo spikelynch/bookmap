@@ -39,24 +39,16 @@ var svg = d3.select("body").append("svg")
 .attr("width", width)
     .attr("height", width);
 
-lcoords = []
 
-for( var i = 0; i < 1024; i++ ) {
-//    scoords = _hilbert(i, 8);
-//    coords = scoords.map(function (i) { return i * 9 });
-//    coords = hilbert(i, 1024, 8, 600);
-      coords = hbookmap(i);
-    if( lcoords ) {
- svg.append("line")
-.attr("class", "map")
-.attr("stroke", hcolour(i))
-.attr("stroke-width", 10)
-.attr("x1", lcoords[0])
-.attr("y1", lcoords[1])
-.attr("x2", coords[0])
-.attr("y2", coords[1])
-    }
-lcoords = coords;
+for( var i = 0; i < 1024; i += 1 ) {
+    coords = hbookmap(i / 1024.0);
+    svg.append("circle")
+    .attr("class", "demo")
+    .attr("fill", hcolour(i))
+    .attr("stroke-width", 0)
+    .attr("cx", coords[0])
+    .attr("cy", coords[1])
+    .attr("r", 4);
 }
 
 
