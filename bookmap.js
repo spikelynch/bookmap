@@ -2,7 +2,7 @@
 ZOOM_EXTENT = [ 0.25, 80 ];
 
 
-
+WORD_JITTER = 0.001;
 JITTER = 10;
 RADIUS = 2;
 CHARGE = 100;
@@ -21,16 +21,11 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 var bookmap_controls = {};
 
-function book2node(b) {
-    // - go through the list
-    // - for each dewey number with more than one title, count how many 
-    //   are on that number, and find the next dewey number
-    // - take the title (and author) and map them to a distribution between
-    //   the lower and upper bounds, and then use that value as the 1-d coord
+function book2node_jitter(b) {
     coords = hbookmap(b.dd * 0.001);
     hue = 360 * b.dd * 0.001;
-    cell_c = d3.hsl(hue, .65, 0.5).toString();
-    node_c = d3.hsl(hue, .9, .8).toString();
+    cell_c = d3.hsl(hue, .75, 0.7).toString();
+    node_c = d3.hsl(hue, .9, 1).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
@@ -40,7 +35,44 @@ function book2node(b) {
     };
 }
 
+function book2node(b) {
+    // - go through the list
+    // - for each dewey number with more than one title, count how many 
+    //   are on that number, and find the next dewey number
+    // - take the title (and author) and map them to a distribution between
+    //   the lower and upper bounds, and then use that value as the 1-d coord
+    var jd = b.dd + WORD_JITTER * words2float(b.authors + " " + b.title);
+    coords = hbookmap(jd * 0.001);
+    hue = 360 * jd * 0.001;
+    cell_c = d3.hsl(hue, .75, 0.7).toString();
+    node_c = d3.hsl(hue, .9, 1).toString();
+    return {
+        "x": coords[0], "y": coords[1],
+        "cell_c": cell_c,
+        "node_c": node_c,
+        "label": b.dd + " " + b.title,
+        "dewey": b.dd
+    };
+}
 
+
+// Alternative to the original jitter - turns a string into a float
+
+function words2float(s) {
+    var n = 0;
+    for( var i = 0, il = s.length; i < il; i++ ) {
+        var a = s.charCodeAt(i);
+        if( a > 64 && a < 91 ) {
+            a -= 64;
+        } else if( a > 96 && a < 123 ) {
+            a -= 96;
+        } else {
+            a = 0;
+        }
+        n += a / Math.pow(26, i + 1);
+    }
+    return n;
+}
 
 
 
