@@ -25,7 +25,7 @@ function book2node(b) {
     coords = hbookmap(b.dd * 0.001);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, 0, 0).toString();
+    node_c = d3.hsl(hue, .9, .8).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
