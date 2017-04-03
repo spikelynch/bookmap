@@ -13,7 +13,6 @@ LISTS = [
 
 
 function setup_lists(chart_fn) {
-    hilbert_init(
     
     var dd = d3.select("form").append("select").attr("id", "listmenu");
     var options = dd
