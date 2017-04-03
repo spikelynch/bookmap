@@ -21,7 +21,7 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 var bookmap_controls = {};
 
-function book2node_jitter(b) {
+function book2node(b) {
     coords = hbookmap(b.dd * 0.001);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
@@ -35,7 +35,7 @@ function book2node_jitter(b) {
     };
 }
 
-function book2node(b) {
+function book2node_new(b) {
     // - go through the list
     // - for each dewey number with more than one title, count how many 
     //   are on that number, and find the next dewey number
