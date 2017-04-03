@@ -1,56 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bookmap: voronoi diagram with Hilbert coords</title>
+    <title>Hilbert demo</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link rel="stylesheet" href="style.css" />
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="booklist.js"></script>
     <script src="hilbert.js"></script> 
-    <style type="text/css">
-    </style>
 </head>
 <body>
 
-<div id="nav">
-    <p><a href="index.html">Static</a> | <a
-  href="vforce.html">Dynamic</a> | <b>Hilbert curve</b></p>
-</div>
-
-<div id="notes">
-  <p>The Hilbert Curve is a fractal which passes through every point
-  on a unit square: it can be used to map 1D values into 2D while
-  retaining the closeness of 1D neighbours.</p>
-  
-
-</div>
 
 <script type="text/javascript">
 
-function hcolour(dd) {
-    return d3.hsl(360 * dd /1024, 1, 0.76).toString();
-}
-
-
-width = 600;
-
-var svg = d3.select("body").append("svg")
-.attr("id", "chart")
-.attr("width", width)
-    .attr("height", width);
-
-
-for( var i = 0; i < 1024; i += 1 ) {
-    coords = hbookmap(i / 1024.0);
-    svg.append("circle")
-    .attr("class", "demo")
-    .attr("fill", hcolour(i))
-    .attr("stroke-width", 0)
-    .attr("cx", coords[0])
-    .attr("cy", coords[1])
-    .attr("r", 4);
-}
-
+hilbert_demo();
 
 
 
