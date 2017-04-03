@@ -27,7 +27,7 @@ function book2node(b) {
     //   are on that number, and find the next dewey number
     // - take the title (and author) and map them to a distribution between
     //   the lower and upper bounds, and then use that value as the 1-d coord
-    coords = hbookmap(b.dd);
+    coords = hbookmap(b.dd * 0.001);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .65, 0.5).toString();
     node_c = d3.hsl(hue, .9, .8).toString();

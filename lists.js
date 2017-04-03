@@ -13,6 +13,8 @@ LISTS = [
 
 
 function setup_lists(chart_fn) {
+    hilbert_init(
+    
     var dd = d3.select("form").append("select").attr("id", "listmenu");
     var options = dd
         .selectAll('option')
@@ -46,7 +48,7 @@ function setup_lists(chart_fn) {
             var n = parseInt(option);
             if( n ) {
                 var booklist = d3.range(n).map(function(i) {
-                    return book2node({ "dd": Math.random() * 1000, "title": "" });
+                    return book2node({ "dd": Math.random(), "title": "" });
                 });
                 chart_fn(booklist);
             }
@@ -58,11 +60,11 @@ function setup_lists(chart_fn) {
 
 // "lost marbles"
 var bookrnd3 = d3.range(200).map(function(i) {
-    return book2node({ "dd": (Math.random() + Math.random() ) * 1000, "title": "" });
+    return book2node({ "dd": (Math.random() + Math.random() ), "title": "" });
 });
 
 var bookrnd2 = d3.range(200).map(function(i) {
-    return book2node({ "dd": (Math.random() + Math.random() ) * 500, "title": "" });
+    return book2node({ "dd": (Math.random() + Math.random() ) * .5, "title": "" });
 });
 
 
