@@ -61,6 +61,12 @@ function hilbert_r(i, o, x0, y0, path) {
     n = side * side;
     seg = n / 4;
     s = Math.floor(i / seg);
+    if( s < 0 ) {
+        s = 0;
+    }
+    if( s > 3 ) {
+        s = 3;
+    }
     x = x0 + path[s][0] * side;
     y = y0 + path[s][1] * side;
     
