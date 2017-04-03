@@ -20,8 +20,27 @@
     width: 400px;
 }
 
+#search {
+    position: absolute;
+    top: 540px;
+    left: 640px;
+    width: 400px;
+}
+
+#controls {
+    position: absolute;
+    top: 280px;
+    left: 640px;
+    width: 400px;
+    height: 240px;
+}
+    
+
 #status {
-    margin-top: 20px;
+    position: absolute;
+    top: 570px;
+    left: 640px;
+    width: 400px;
 }
 
 .polygons {
