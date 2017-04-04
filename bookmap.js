@@ -48,7 +48,7 @@ function book2node(b) {
     coords = hbookmap(jd * 0.001);
     hue = 360 * jd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, .8, .25).toString();
+    node_c = d3.hsl(hue, .8, .9).toString();
     return {
         "x": coords[0], "y": coords[1],
         "cell_c": cell_c,
