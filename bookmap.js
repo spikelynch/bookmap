@@ -2,7 +2,8 @@
 ZOOM_EXTENT = [ 0.25, 80 ];
 
 
-WORD_JITTER = 0.001;
+WORD_JITTER = 1;
+EXTRA_JITTER = 0.02;
 JITTER = 10;
 RADIUS = 2;
 CHARGE = 100;
@@ -21,11 +22,11 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 var bookmap_controls = {};
 
-function book2node(b) {
+function book2node_old(b) {
     coords = hbookmap(b.dd * 0.001);
     hue = 360 * b.dd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, .8, .98).toString();
+    node_c = d3.hsl(hue, .8, .25).toString();
     return {
         "x": jitter(coords[0]), "y": jitter(coords[1]),
         "cell_c": cell_c,
@@ -35,22 +36,25 @@ function book2node(b) {
     };
 }
 
-function book2node_new(b) {
+
+function book2node(b) {
     // - go through the list
     // - for each dewey number with more than one title, count how many 
     //   are on that number, and find the next dewey number
     // - take the title (and author) and map them to a distribution between
     //   the lower and upper bounds, and then use that value as the 1-d coord
-    var jd = b.dd + WORD_JITTER * words2float(b.authors + " " + b.title);
+    var textkey = book2key(b);
+    var jd = b.dd + WORD_JITTER * words2float(textkey);
     coords = hbookmap(jd * 0.001);
     hue = 360 * jd * 0.001;
     cell_c = d3.hsl(hue, .75, 0.7).toString();
-    node_c = d3.hsl(hue, .9, 1).toString();
+    node_c = d3.hsl(hue, .8, .25).toString();
     return {
         "x": coords[0], "y": coords[1],
         "cell_c": cell_c,
         "node_c": node_c,
         "label": b.dd + " " + b.title,
+        "textkey": textkey,
         "dewey": b.dd
     };
 }
@@ -71,9 +75,16 @@ function words2float(s) {
         }
         n += a / Math.pow(26, i + 1);
     }
-    return n;
+    return n - EXTRA_JITTER + 2 * EXTRA_JITTER * Math.random();
 }
 
+function book2key(b) {
+    if( b.authors ) {
+        return b.authors + " " + b.title;
+    } else {
+        return b.title;
+    }
+}
 
 
 function bookmap_static(books) {

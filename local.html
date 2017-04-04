@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookmap: voronoi diagram with Hilbert coords</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="style.css" />
+    <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="hilbert.js"></script> 
+    <script src="bookmap.js"></script>
+    <script src="Lists/atomic_static.js"></script>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+
+<div id="chart">
+</div>
+
+<div id="nav">
+</div>
+
+<div id="notes">
+  <p>Local test version of the static view which loads the books directly</p>
+</div>
+
+<div id="search">
+  <form name="controls">
+  </form>
+</div>
+
+<div id="status"></div>
+
+
+<script type="text/javascript">
+
+hilbert_init(14, 600);
+
+var booklist = STATIC.map(book2node);
+
+var collapsed = {};
+
+for ( var i = 0, il = booklist.length; i < il; i++ ) {
+    var coords = booklist[i].x + "," + booklist[i].y;
+    var l = coords + ", " + booklist[i].textkey;
+    if( coords in collapsed ) {
+        console.log("Collision " + l + " - " + collapsed[coords]);
+    } else {
+        collapsed[coords] = l;
+    }
+}
+
+bookmap_static(booklist);
+
+
+</script>
+</body>
+</html>

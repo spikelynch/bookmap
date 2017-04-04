@@ -57,6 +57,7 @@ function setup_lists(chart_fn) {
 }
 
 
+
 // "lost marbles"
 var bookrnd3 = d3.range(200).map(function(i) {
     return book2node({ "dd": (Math.random() + Math.random() ), "title": "" });
