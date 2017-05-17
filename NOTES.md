@@ -8,7 +8,9 @@ Try this with a force map
 to try and reveal clustering at a discipline level
 
 
-## Endeca JSON search
 
-{
-    
+TODO:
+
+Make the colours easier to control - with css or a json config file
+
+Try animating live searches in the voronoi map

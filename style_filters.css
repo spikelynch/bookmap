@@ -45,6 +45,7 @@
 
 .polygons {
     fill: #ffffff;
+    filter: url('displace.svg#displace');
 }
 
 .cell {
