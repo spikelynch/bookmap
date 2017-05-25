@@ -26,14 +26,18 @@ function cell_fill(d) {
 
 
 function node_fill(d) {
-    if( d.data ) {
-        return d3.hsl(.36 * d.data.colour, .8, .9).toString()
+    console.log("Nodes!!! = " + d);
+    console.log("Colour = " + d.colour)
+    if( d.colour ) {
+        var fill = d3.hsl(.36 * d.colour, .8, .9, .4).toString();
+        console.log("Effective colour = " + fill);
+        return fill;
     } else {
         return "white"
     }
 }
 
-function node_size(d) { return 2; }
+function node_size(d) { return d.label.length * 0.1 }
 
 
 // cell_fill function(d) { return d ? ( d.data ? d.data.cell_c : null ) : null;}
@@ -167,8 +171,8 @@ function bookmap_dynamic (books) {
         .data(simulation.nodes()).enter()
         .append("circle")
         .attr("class", "node")
-        .attr("fill", node_fill)
-        .attr("r", node_size);
+        .attr("fill", function (d) { return node_fill(books[d.index])})
+        .attr("r", function (d) { return node_size(books[d.index])});
 
 
     polygons.call(d3.drag()

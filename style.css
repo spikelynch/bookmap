@@ -34,7 +34,7 @@
     width: 400px;
     height: 240px;
 }
-    
+
 
 #status {
     position: absolute;
@@ -55,7 +55,7 @@
 
 .link {
     stroke: #000;
-    stroke-opacity: 20%;
+    stroke-opacity: 0.4;
     stroke-width: 0.1;
 }
 
