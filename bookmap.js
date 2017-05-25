@@ -16,9 +16,19 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 var bookmap_controls = {};
 
+// global colour parameters
+
+var cell_colour = {
+    'hue': 0,
+    'saturation': 0.5,
+    'luminance': 0.5,
+    'map': 'hue'
+}
+
+
 function cell_fill(d) {
     if( d.data ) {
-        return d3.hsl(0, 0, d.data.colour * 0.001).toString()
+        return d3.hsl(cell_colour.hue + d.data.colour * .36, cell_colour.saturation, cell_colour.luminance).toString()
     } else {
         return "white"
     }
@@ -197,6 +207,7 @@ function bookmap_dynamic (books) {
         simulation.velocityDecay(velocity);
         simulation.restart();
     };
+
 
 
     simulation.on("tick", function () {
