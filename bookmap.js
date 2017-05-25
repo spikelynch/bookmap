@@ -18,7 +18,7 @@ var bookmap_controls = {};
 
 function cell_fill(d) {
     if( d.data ) {
-        return d3.hsl(.36 * d.data.colour, .75, .7).toString()
+        return d3.hsl(0, 0, d.data.colour * 0.001).toString()
     } else {
         return "white"
     }
@@ -26,12 +26,8 @@ function cell_fill(d) {
 
 
 function node_fill(d) {
-    console.log("Nodes!!! = " + d);
-    console.log("Colour = " + d.colour)
     if( d.colour ) {
-        var fill = d3.hsl(.36 * d.colour, .8, .9, .4).toString();
-        console.log("Effective colour = " + fill);
-        return fill;
+       return d3.hsl(.36 * d.colour, 0, .8, .6).toString();
     } else {
         return "white"
     }
