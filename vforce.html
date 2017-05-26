@@ -58,19 +58,15 @@ var csvg = d3.select("#sliders").append("svg")
     .attr("width", 400)
 .attr("height", 160);
 
+make_select(
+    d3.select("form"), [ "spectrum", "monotone" ],
+    function(v) { bookmap_controls.cells_mode(v)});
 
+make_slider(csvg, 0, [ 0, 360 ], function(d) { bookmap_controls.cells_hue(d) });
 
-make_ctrl(csvg, 0, [ 0, 360 ], function(v) {
-    bookmap_controls.cells_hue(v)
-});
+make_slider(csvg, 1, [ 0, 1 ], function(d) { bookmap_controls.cells_sat(d) });
 
-make_ctrl(csvg, 1, [ 0, 1 ], function(v) {
-    bookmap_controls.cells_sat(v)
-});
-
-make_ctrl(csvg, 2, [ 0, 1 ], function(v) {
-    bookmap_controls.cells_lum(v)
-});
+make_slider(csvg, 2, [ 0, 1 ], function(d) {bookmap_controls.cells_lum(d) });
 
 
 </script>

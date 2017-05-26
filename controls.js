@@ -7,10 +7,19 @@ var YSPACE = 40;
 
 var CWIDTH = SIZE.width - MARGIN.right - MARGIN.left;
 
+function make_select(cont, data, callback) {
+    var select = cont.append('select')
+        .attr('class', 'select')
+        .on('change', function() { callback(this.value) });
+    var options = select
+        .selectAll('option')
+        .data(data).enter()
+        .append('option')
+        .text(function (d) { return d });
+}
 
 
-
-function make_ctrl(svg, i, domain, callback) {
+function make_slider(svg, i, domain, callback) {
 
     var x = d3.scaleLinear()
         .domain(domain)

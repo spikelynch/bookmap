@@ -22,7 +22,7 @@ var cell_colour = {
     'hue': 0,
     'saturation': 0.5,
     'luminance': 0.5,
-    'mode': 'colour'
+    'mode': 'spectrum'
 }
 
 
@@ -30,7 +30,7 @@ var cell_colour = {
 function cell_fill(d) {
     if( d.data ) {
         s = cell_colour.saturation;
-        if( cell_colour.mode == 'grayscale' ) {
+        if( cell_colour.mode == 'monotone' ) {
             h = cell_colour.hue;
             l = .5 + cell_colour.luminance * d.data.colour * 0.0005;
         } else {
@@ -214,6 +214,11 @@ function bookmap_dynamic (books) {
         cell_colour.luminance = lum;
         d3.selectAll('path').attr('fill', cell_fill);
     };
+
+    bookmap_controls.cells_mode = function (mode) {
+        cell_colour.mode = mode;
+        d3.selectAll('path').attr('fill', cell_fill);
+    }
 
     simulation.on("tick", function () {
         polygons
