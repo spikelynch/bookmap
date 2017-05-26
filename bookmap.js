@@ -22,17 +22,22 @@ var cell_colour = {
     'hue': 0,
     'saturation': 0.5,
     'luminance': 0.5,
-    'map': 'hue'
+    'mode': 'colour'
 }
 
-bookmap_controls.hue = function(h) {
-    cell_colour.hue = h / 360;
-}
 
 
 function cell_fill(d) {
     if( d.data ) {
-        return d3.hsl(0, 0, d.data.colour * 0.001).toString()
+        s = cell_colour.saturation;
+        if( cell_colour.mode == 'grayscale' ) {
+            h = cell_colour.hue;
+            l = .5 + cell_colour.luminance * d.data.colour * 0.0005;
+        } else {
+            h = cell_colour.hue + (d.data.colour * 0.36);
+            l = cell_colour.luminance;
+        }
+        return d3.hsl(h, s, l).toString();
     } else {
         return "white"
     }
@@ -41,7 +46,7 @@ function cell_fill(d) {
 
 function node_fill(d) {
     if( d.colour ) {
-       return d3.hsl(.36 * d.colour, 0, .8, .6).toString();
+       return d3.hsl(.36 * d.colour, 0, .8, .9).toString();
     } else {
         return "white"
     }
@@ -195,24 +200,20 @@ function bookmap_dynamic (books) {
 
     // callbacks to be driven by the controls
 
-    bookmap_controls.charge = function (charge) {
-        console.log("Setting charge to " + charge);
-        simulation.force("charge").strength(-charge);
+    bookmap_controls.cells_hue = function (hue) {
+        cell_colour.hue = hue;
+        d3.selectAll('path').attr('fill', cell_fill);
     };
 
-    bookmap_controls.alpha = function (alpha) {
-        console.log("Setting alpha to " + alpha);
-        simulation.alphaDecay(alpha);
-        simulation.restart();
+    bookmap_controls.cells_sat = function (sat) {
+        cell_colour.saturation = sat;
+        d3.selectAll('path').attr('fill', cell_fill);
     };
 
-    bookmap_controls.velocity = function (velocity) {
-        console.log("Setting velocity to " + velocity);
-        simulation.velocityDecay(velocity);
-        simulation.restart();
+    bookmap_controls.cells_lum = function (lum) {
+        cell_colour.luminance = lum;
+        d3.selectAll('path').attr('fill', cell_fill);
     };
-
-
 
     simulation.on("tick", function () {
         polygons
@@ -229,7 +230,7 @@ function bookmap_dynamic (books) {
         nodes.attr("cx", function(d) { return d.x })
              .attr("cy", function(d) { return d.y });
 
-        d3.select("path").attr("fill", function(d) { console.log("HI"); return "white"});
+
 
     });
 
