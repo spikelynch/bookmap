@@ -229,7 +229,6 @@ function bookmap_dynamic (books) {
         nodes.attr("cx", function(d) { return d.x })
              .attr("cy", function(d) { return d.y });
 
-        d3.select("path").attr("fill", function(d) { console.log("HI"); return "white"});
 
     });
 
