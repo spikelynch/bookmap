@@ -35,10 +35,17 @@
     height: 240px;
 }
 
+#sliders {
+    position: absolute;
+    top: 400px;
+    left: 640px;
+    width: 400px;
+    height: 80px;
+}
 
 #status {
     position: absolute;
-    top: 400px;
+    top: 640px;
     left: 640px;
     width: 400px;
 }

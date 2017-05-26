@@ -1,9 +1,9 @@
 
 // Adapted from https://bl.ocks.org/mbostock/6452972
 
-var MARGIN = { right: 30, left: 30, top: 40 };
-var SIZE = { width: 400, height: 240 };
-var YSPACE = 90;
+var MARGIN = { right: 10, left: 10, top: 20 };
+var SIZE = { width: 400, height: 80 };
+var YSPACE = 80;
 
 var CWIDTH = SIZE.width - MARGIN.right - MARGIN.left;
 
@@ -49,7 +49,7 @@ function make_ctrl(svg, i, domain, callback) {
         .attr("x", x)
         .attr("text-anchor", "middle")
         .text(function(d) { return d; });
-    
+
     var handle = slider.insert("circle", ".track-overlay")
         .attr("class", "handle")
         .attr("r", 9);
@@ -58,11 +58,10 @@ function make_ctrl(svg, i, domain, callback) {
         handle.attr("cx", x(v));
         callback(v);
     }
-    
+
 }
 
 // function hue(h) {
 //   handle.attr("cx", x(h));
 //   svg.style("background-color", d3.hsl(h, 0.8, 0.8));
 // }
-
