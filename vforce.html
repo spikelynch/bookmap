@@ -27,8 +27,8 @@
 </div>
 <div id="status"></div>
 
-<div id="controls"></div>
-
+<div id="controls">
+</div>
 
 <script type="text/javascript">
 
@@ -36,22 +36,18 @@ hilbert_init(14, 600);
 
 setup_lists(d3.select("#listform"), bookmap_dynamic, true);
 
-
-
 var csvg = d3.select("#controls").append("svg")
     .attr("width", 440)
     .attr("height", 490);
 
 make_select(
-    d3.select("form"), [ "spectrum", "monotone" ],
-    function(v) { bookmap_controls.cells_mode(v)}
+    csvg, 0, "Cells", [ "spectrum", "monotone" ], function(v) { bookmap_controls.cells_mode(v)}
 );
 
-make_slider(csvg, 0, "Hue", [ 0, 360 ], 0, function(d) { bookmap_controls.cells_hue(d) });
+make_slider(csvg, 1, "Hue", [ 0, 360 ], 0, function(d) { bookmap_controls.cells_hue(d) });
+make_slider(csvg, 2, "Sat", [ 0, 1 ], 0.5, function(d) { bookmap_controls.cells_sat(d) });
+make_slider(csvg, 3, "Lum", [ 0, 1 ], 0.5, function(d) {bookmap_controls.cells_lum(d) });
 
-make_slider(csvg, 1, "Sat", [ 0, 1 ], 0.5, function(d) { bookmap_controls.cells_sat(d) });
-
-make_slider(csvg, 2, "Lum", [ 0, 1 ], 0.5, function(d) {bookmap_controls.cells_lum(d) });
 
 
 </script>
