@@ -2,7 +2,7 @@
 // Adapted from https://bl.ocks.org/mbostock/6452972
 
 var MARGIN = { right: 10, left: 10, top: 20, label: 40 };
-var SIZE = { width: 400, height: 160 };
+var SIZE = { width: 360, height: 160 };
 var YSPACE = 40;
 
 var CWIDTH = SIZE.width - MARGIN.right - MARGIN.left;

@@ -14,35 +14,38 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 // global var where the dynamic bookmap puts control callbacks
 
-var bookmap_controls = {};
+var ccb = {};
 
 // global colour parameters
 
-var cell_colour = {
-    'hue': 0,
-    'saturation': 0.5,
-    'luminance': 0.5,
-    'mode': 'spectrum'
+var colours = {
+    'cell': {
+        'hue': 0,
+        'saturation': 0.5,
+        'luminance': 0.5,
+        'mode': 'spectrum'
+    },
+    'node': {
+        'hue': 0,
+        'saturation': 0.5,
+        'luminance': 0.5,
+        'mode': 'spectrum'
+    }
 };
 
-var node_colour = {
-'hue': 0,
-'saturation': 0.5,
-'luminance': 0.5,
-'mode': 'spectrum'
-};
 
 
-
-function cell_fill(d) {
-    if( d.data ) {
-        s = cell_colour.saturation;
-        if( cell_colour.mode == 'monotone' ) {
-            h = cell_colour.hue;
-            l = .5 + cell_colour.luminance * d.data.colour * 0.0005;
+function fill_colour(things, d) {
+    c = get_colour(d)
+    cs = colours[things]
+    if( c ) {
+        s = cs.saturation;
+        if( cs.mode == 'monotone' ) {
+            h = cs.hue;
+            l = .5 + cs.luminance * c * 0.0005;
         } else {
-            h = cell_colour.hue + (d.data.colour * 0.36);
-            l = cell_colour.luminance;
+            h = cs.hue + c * 0.36;
+            l = cs.luminance;
         }
         return d3.hsl(h, s, l).toString();
     } else {
@@ -50,19 +53,28 @@ function cell_fill(d) {
     }
 }
 
-
-
-
-
-
-function node_fill(d) {
-     if( d.colour ) {
-        return d3.hsl(.36 * d.colour, .3, .5,).toString();
-     } else {
-         return "white"
-     }
-
+function get_colour(d) {
+    if( d.data ) {
+        return d.data.colour;
+    }
+    if( d.colour ) {
+        return d.colour;
+    }
+    return false;
 }
+
+
+
+
+//
+// function node_fill(d) {
+//      if( d.colour ) {
+//         return d3.hsl(.36 * d.colour, .3, .5,).toString();
+//      } else {
+//          return "white"
+//      }
+//
+// }
 
 
 
@@ -76,8 +88,6 @@ function node_fill(d) {
 
 function node_size(d) { return d.label.length * 0.076 }
 
-
-// cell_fill function(d) { return d ? ( d.data ? d.data.cell_c : null ) : null;}
 
 
 
@@ -112,7 +122,7 @@ function bookmap_static(books) {
         .append("path")
         .attr("class", "cell")
         .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
-        .attr("fill", cell_fill)
+        .attr("fill", function(d) { fill_colour('cell', d) })
         .append("title")
         .text(function(d) { return d ? ( d.data ? d.data.label : "" ) :"" });
 
@@ -188,7 +198,7 @@ function bookmap_dynamic (books) {
         .enter()
         .append("path")
         .attr("class", "cell")
-        .attr("fill", cell_fill);
+        .attr("fill", function (d) { return fill_colour('cell', d) });
 
 
     polygons.append("title")
@@ -208,7 +218,7 @@ function bookmap_dynamic (books) {
         .data(simulation.nodes()).enter()
         .append("circle")
         .attr("class", "node")
-        .attr("fill", function (d) { return node_fill(books[d.index])})
+        .attr("fill", function (d) { return fill_colour('node', books[d.index])})
         .attr("r", function (d) { return node_size(books[d.index])});
 
 
@@ -222,30 +232,11 @@ function bookmap_dynamic (books) {
 
     // callbacks to be driven by the controls
 
-    bookmap_controls.cells_hue = function (hue) {
-        cell_colour.hue = hue;
-        recolour();
-    };
-
-    bookmap_controls.cells_sat = function (sat) {
-        cell_colour.saturation = sat;
-        recolour();
-    };
-
-    bookmap_controls.cells_lum = function (lum) {
-        cell_colour.luminance = lum;
-        recolour();
-    };
-
-    bookmap_controls.cells_mode = function (mode) {
-        cell_colour.mode = mode;
-        recolour();
-    }
-
-    function recolour() {
-        nodes.attr('fill', node_fill);
-        d3.selectAll('path').attr('fill', cell_fill);
-
+    ccb = function(thing, parameter, value) {
+        colours[thing][parameter] = value;
+        nodes.attr('fill', function (d) { return fill_colour('node', d)});
+        d3.selectAll('path')
+        .attr('fill', function (d) { return fill_colour('cell', d)});
     }
 
     simulation.on("tick", function () {

@@ -31,3 +31,13 @@
   stroke-opacity: 0.5;
   stroke-width: 1.25px;
 }
+
+.label {
+    font-family: Helvetica, Arial;
+    font-weight: bold;
+    font-size: 10px
+}
+
+span.label {
+    width: 40px
+}

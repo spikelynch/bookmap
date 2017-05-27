@@ -37,17 +37,18 @@ hilbert_init(14, 600);
 setup_lists(d3.select("#listform"), bookmap_dynamic, true);
 
 var csvg = d3.select("#controls").append("svg")
-    .attr("width", 440)
+    .attr("width", 400)
     .attr("height", 490);
 
-make_select(
-    csvg, 0, "Cells", [ "spectrum", "monotone" ], function(v) { bookmap_controls.cells_mode(v)}
-);
+function colour_ctrls(i, target) {
+    make_select(csvg, i, target, [ "spectrum", "monotone" ], function(v) { ccb(target, 'mode', v)});
+    make_slider(csvg, i+1, "Hue", [ 0, 360 ], 0, function(d) { ccb(target, 'hue', d) });
+    make_slider(csvg, i+2, "Sat", [ 0, 1 ], 0.5, function(d) { ccb(target, 'saturation', d) });
+    make_slider(csvg, i+3, "Lum", [ 0, 1 ], 0.5, function(d) { ccb(target, 'luminance', d) });
+}
 
-make_slider(csvg, 1, "Hue", [ 0, 360 ], 0, function(d) { bookmap_controls.cells_hue(d) });
-make_slider(csvg, 2, "Sat", [ 0, 1 ], 0.5, function(d) { bookmap_controls.cells_sat(d) });
-make_slider(csvg, 3, "Lum", [ 0, 1 ], 0.5, function(d) {bookmap_controls.cells_lum(d) });
-
+colour_ctrls(0, 'cell');
+colour_ctrls(4, 'node');
 
 
 </script>

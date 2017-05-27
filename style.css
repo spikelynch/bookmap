@@ -63,7 +63,7 @@
 }
 
 .nodes {
-    filter: blur(5px);
+/*    filter: blur(5px);*/
 }
 
 .node {
@@ -75,14 +75,4 @@
 circle.demo {
     stroke-width: 0;
     fill: #888888;
-}
-
-.label {
-    font-family: Helvetica, Arial;
-    font-weight: bold;
-    font-size: 10px
-}
-
-span.label {
-    width: 40px
 }
