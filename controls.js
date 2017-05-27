@@ -1,7 +1,7 @@
 
 // Adapted from https://bl.ocks.org/mbostock/6452972
 
-var MARGIN = { right: 10, left: 10, top: 20 };
+var MARGIN = { right: 10, left: 10, top: 20, label: 40 };
 var SIZE = { width: 400, height: 160 };
 var YSPACE = 40;
 
@@ -19,7 +19,7 @@ function make_select(cont, data, callback) {
 }
 
 
-function make_slider(svg, i, domain, callback) {
+function make_slider(svg, i, label, domain, init, callback) {
 
     var x = d3.scaleLinear()
         .domain(domain)
@@ -29,9 +29,19 @@ function make_slider(svg, i, domain, callback) {
     var x0 = MARGIN.left;
     var y0 = MARGIN.top + i * YSPACE;
 
-    var slider = svg.append("g")
-        .attr("class", "slider")
+    var sg = svg.append("g")
+        .attr("class", "slidergroup")
         .attr("transform", "translate(" + x0 + "," + y0 + ")");
+
+    sg.append("text")
+        .attr("class", "slider")
+        .attr("x", 0)
+        .attr("y", 0)
+        .text(label);
+
+    var slider = sg.append("g")
+        .attr("class", "slider")
+        .attr("transform", "translate(" + MARGIN.label + ",0)");
 
     slider.append("line")
         .attr("class", "track")
@@ -59,8 +69,10 @@ function make_slider(svg, i, domain, callback) {
         .attr("text-anchor", "middle")
         .text(function(d) { return d; });
 
+    var initx = x(init);
     var handle = slider.insert("circle", ".track-overlay")
         .attr("class", "handle")
+        .attr("cx", initx)
         .attr("r", 9);
 
     function dragme(v) {
@@ -69,8 +81,3 @@ function make_slider(svg, i, domain, callback) {
     }
 
 }
-
-// function hue(h) {
-//   handle.attr("cx", x(h));
-//   svg.style("background-color", d3.hsl(h, 0.8, 0.8));
-// }

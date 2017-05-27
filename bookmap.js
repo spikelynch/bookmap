@@ -23,7 +23,14 @@ var cell_colour = {
     'saturation': 0.5,
     'luminance': 0.5,
     'mode': 'spectrum'
-}
+};
+
+var node_colour = {
+'hue': 0,
+'saturation': 0.5,
+'luminance': 0.5,
+'mode': 'spectrum'
+};
 
 
 
@@ -44,13 +51,28 @@ function cell_fill(d) {
 }
 
 
+
+
+
+
 function node_fill(d) {
-    if( d.colour ) {
-       return d3.hsl(.36 * d.colour, 0, .8, .9).toString();
-    } else {
-        return "white"
-    }
+     if( d.colour ) {
+        return d3.hsl(.36 * d.colour, .3, .5,).toString();
+     } else {
+         return "white"
+     }
+
 }
+
+
+
+// function node_fill(d) {
+//     if( d.colour ) {
+//        return d3.hsl(.36 * d.colour, 0, .8, .9).toString();
+//     } else {
+//         return "white"
+//     }
+// }
 
 function node_size(d) { return d.label.length * 0.076 }
 
@@ -202,22 +224,28 @@ function bookmap_dynamic (books) {
 
     bookmap_controls.cells_hue = function (hue) {
         cell_colour.hue = hue;
-        d3.selectAll('path').attr('fill', cell_fill);
+        recolour();
     };
 
     bookmap_controls.cells_sat = function (sat) {
         cell_colour.saturation = sat;
-        d3.selectAll('path').attr('fill', cell_fill);
+        recolour();
     };
 
     bookmap_controls.cells_lum = function (lum) {
         cell_colour.luminance = lum;
-        d3.selectAll('path').attr('fill', cell_fill);
+        recolour();
     };
 
     bookmap_controls.cells_mode = function (mode) {
         cell_colour.mode = mode;
+        recolour();
+    }
+
+    function recolour() {
+        nodes.attr('fill', node_fill);
         d3.selectAll('path').attr('fill', cell_fill);
+
     }
 
     simulation.on("tick", function () {
