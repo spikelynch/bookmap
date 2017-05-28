@@ -34,7 +34,7 @@
 
 hilbert_init(14, 600);
 
-var ccb = setup_lists(d3.select("#listform"), bookmap_dynamic, true);
+var ccb = setup_lists(d3.select("#listform"), bookmap_dynamic, false);
 
 console.log("ccb = " + ccb);
 
@@ -46,7 +46,7 @@ function colour_ctrls(cb, i, target) {
     make_select(csvg, i, target, [ "spectrum", "monotone" ], function(v) {
         console.log("mode");
         cb(target, 'mode', v) } );
-    make_slider(csvg, i+1, "Hue", [ 0, 360 ], style[target].hue, function(d) { console.log("hue"); cb(target, 'hue', d) });
+    make_slider(csvg, i+1, "Hue", [ 0, 360 ], style[target].hue, function(d) { ccb(target, 'hue', d) });
     make_slider(csvg, i+2, "Sat", [ 0, 1 ], style[target].saturation, function(d) { ccb(target, 'saturation', d) });
     make_slider(csvg, i+3, "Lum", [ 0, 1 ], style[target].luminance, function(d) { ccb(target, 'luminance', d) });
     make_slider(csvg, i+4, "Blur", [ 0, 20 ], 0, function(d) { ccb(target, 'blur', d);});

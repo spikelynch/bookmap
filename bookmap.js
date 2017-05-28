@@ -24,7 +24,7 @@ var style = {
         'saturation': 0.5,
         'luminance': 0.5,
         'mode': 'spectrum',
-        'blur': 0
+        'blur': null
     },
     'node': {
         'hue': 0,
@@ -32,7 +32,7 @@ var style = {
         'luminance': 0.7,
         'mode': 'spectrum',
         'rmode': 'constant',
-        'blur': 0,
+        'blur': null,
         'radius': 5,
         'opacity': .8
     }
@@ -211,6 +211,8 @@ function bookmap_dynamic (books) {
         .attr("r", function (d) { return node_size(books[d.index])})
         .attr("opacity", function (d) { return style.node.opacity });
 
+    set_blur('node', style.node.blur);
+    set_blur('cell', style.cell.blur);
 
     polygons.call(d3.drag()
                   .on("start", dragstarted)
