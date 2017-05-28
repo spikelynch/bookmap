@@ -208,7 +208,8 @@ function bookmap_dynamic (books) {
         .append("circle")
         .attr("class", "node")
         .attr("fill", function (d) { return fill_colour('node', books[d.index])})
-        .attr("r", function (d) { return node_size(books[d.index])});
+        .attr("r", function (d) { return node_size(books[d.index])})
+        .attr("opacity", function (d) { return style.node.opacity });
 
 
     polygons.call(d3.drag()
@@ -224,7 +225,7 @@ function bookmap_dynamic (books) {
     ccb = function(thing, parameter, value) {
         style[thing][parameter] = value;
         if( parameter == 'blur') {
-            //set_blur(thing, value);
+            set_blur(thing, value);
         } else if( thing == 'node') {
             if( parameter == 'rmode' || parameter == 'radius') {
                 console.log("Setting node radius");
@@ -240,9 +241,12 @@ function bookmap_dynamic (books) {
         }
     };
 
-//    blurcb = ;
-//    nradius = ;
-//    nopacity = ;
+    function set_blur(thing, b) {
+        var blur = b > 0 ? `blur(${b})` : null;
+        var s = ( thing == 'node' ) ? 'nodes' : 'polygons';
+        d3.select('.' + s).attr('filter', blur);
+    }
+
 
     simulation.on("tick", function () {
         polygons
