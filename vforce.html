@@ -40,23 +40,24 @@ console.log("ccb = " + ccb);
 
 var csvg = d3.select("#controls").append("svg")
     .attr("width", 400)
-    .attr("height", 490);
+    .attr("height", 550);
 
 function colour_ctrls(cb, i, target) {
     make_select(csvg, i, target, [ "spectrum", "monotone" ], function(v) {
         console.log("mode");
         cb(target, 'mode', v) } );
-    make_slider(csvg, i+1, "Hue", [ 0, 360 ], colours[target].hue, function(d) { console.log("hue"); cb(target, 'hue', d) });
-    make_slider(csvg, i+2, "Sat", [ 0, 1 ], colours[target].saturation, function(d) { ccb(target, 'saturation', d) });
-    make_slider(csvg, i+3, "Lum", [ 0, 1 ], colours[target].luminance, function(d) { ccb(target, 'luminance', d) });
+    make_slider(csvg, i+1, "Hue", [ 0, 360 ], style[target].hue, function(d) { console.log("hue"); cb(target, 'hue', d) });
+    make_slider(csvg, i+2, "Sat", [ 0, 1 ], style[target].saturation, function(d) { ccb(target, 'saturation', d) });
+    make_slider(csvg, i+3, "Lum", [ 0, 1 ], style[target].luminance, function(d) { ccb(target, 'luminance', d) });
     make_slider(csvg, i+4, "Blur", [ 0, 20 ], 0, function(d) { ccb(target, 'blur', d);});
 }
 
 colour_ctrls(ccb, 0, 'cell');
 colour_ctrls(ccb, 5, 'node');
 
-make_slider(csvg, i+4, "Opacity", [ 0, 1.0 ], .8, function(v) { ccb('nodes', 'opacity', v);});
-make_select(csvg, 10, "Radius", ["constant", "title"], function(v) { ccb('nodes', 'radius', v); });
+make_slider(csvg, 10, "Opacity", [ 0, 1.0 ], .8, function(v) { ccb('node', 'opacity', v);});
+make_select(csvg, 11, "Rmode", ["constant", "title"], function(v) { ccb('node', 'rmode', v); });
+make_slider(csvg, 12, "Radius", [ 1, 50 ], 5, function(v) { ccb('node', 'radius', v);});
 
 </script>
 </body>

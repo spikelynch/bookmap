@@ -25,24 +25,24 @@
     top: 10px;
     left: 640px;
     width: 440px;
-    height: 40px;
+    height: 25px;
 }
 
 #status {
     position: absolute;
-    top: 60px;
+    top: 30px;
     left: 640px;
     width: 440px;
-    height: 40px;
+    height: 25px;
 }
 
 
 #controls {
     position: absolute;
-    top: 110px;
+    top: 60px;
     left: 640px;
     width: 440px;
-    height: 490px;
+    height: 550px;
 }
 
 

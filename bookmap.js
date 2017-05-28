@@ -18,18 +18,23 @@ var ccb = {};
 
 // global colour parameters
 
-var colours = {
+var style = {
     'cell': {
         'hue': 0,
         'saturation': 0.5,
         'luminance': 0.5,
-        'mode': 'spectrum'
+        'mode': 'spectrum',
+        'blur': 0
     },
     'node': {
         'hue': 0,
         'saturation': 0.8,
         'luminance': 0.7,
-        'mode': 'spectrum'
+        'mode': 'spectrum',
+        'rmode': 'constant',
+        'blur': 0,
+        'radius': 5,
+        'opacity': .8
     }
 };
 
@@ -37,7 +42,7 @@ var colours = {
 
 function fill_colour(things, d) {
     c = get_colour(d)
-    cs = colours[things]
+    cs = style[things]
     if( c ) {
         s = cs.saturation;
         if( cs.mode == 'monotone' ) {
@@ -64,29 +69,13 @@ function get_colour(d) {
 }
 
 
-
-
-//
-// function node_fill(d) {
-//      if( d.colour ) {
-//         return d3.hsl(.36 * d.colour, .3, .5,).toString();
-//      } else {
-//          return "white"
-//      }
-//
-// }
-
-
-
-// function node_fill(d) {
-//     if( d.colour ) {
-//        return d3.hsl(.36 * d.colour, 0, .8, .9).toString();
-//     } else {
-//         return "white"
-//     }
-// }
-
-function node_size(d) { return d.label.length * 0.076 }
+function node_size(d) {
+    if( style.node.rmode == 'title' ) {
+        return d.label.length * 0.0075 * style.node.radius;
+    } else {
+        return style.node.radius;
+    }
+}
 
 
 
@@ -233,12 +222,23 @@ function bookmap_dynamic (books) {
     // callbacks to be driven by the controls
 
     ccb = function(thing, parameter, value) {
-        console.log("control callback " + thing + ", " + parameter + ", " + value);
-        colours[thing][parameter] = value;
-        nodes.attr('fill', function (d) { return fill_colour('node', d)});
-        d3.selectAll('path')
-        .attr('fill', function (d) { return fill_colour('cell', d)});
-    }
+        style[thing][parameter] = value;
+        if( parameter == 'blur') {
+            //set_blur(thing, value);
+        } else if( thing == 'node') {
+            if( parameter == 'rmode' || parameter == 'radius') {
+                console.log("Setting node radius");
+                nodes.attr('r', function (d) { return node_size(d); });
+            } else if ( parameter == 'opacity') {
+                nodes.attr('opacity', function (d) { return style.node.opacity });
+            } else {
+                nodes.attr('fill', function (d) { return fill_colour('node', d)});
+            }
+        } else {
+            d3.selectAll('path')
+                .attr('fill', function (d) { return fill_colour('cell', d)});
+        }
+    };
 
 //    blurcb = ;
 //    nradius = ;
