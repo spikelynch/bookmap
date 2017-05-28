@@ -27,8 +27,8 @@ var colours = {
     },
     'node': {
         'hue': 0,
-        'saturation': 0.5,
-        'luminance': 0.5,
+        'saturation': 0.8,
+        'luminance': 0.7,
         'mode': 'spectrum'
     }
 };
@@ -233,11 +233,16 @@ function bookmap_dynamic (books) {
     // callbacks to be driven by the controls
 
     ccb = function(thing, parameter, value) {
+        console.log("control callback " + thing + ", " + parameter + ", " + value);
         colours[thing][parameter] = value;
         nodes.attr('fill', function (d) { return fill_colour('node', d)});
         d3.selectAll('path')
         .attr('fill', function (d) { return fill_colour('cell', d)});
     }
+
+//    blurcb = ;
+//    nradius = ;
+//    nopacity = ;
 
     simulation.on("tick", function () {
         polygons
@@ -275,7 +280,7 @@ function bookmap_dynamic (books) {
         d.data.fx = null;
         d.data.fy = null;
     }
-
+    return ccb;
 }
 
 

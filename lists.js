@@ -40,21 +40,22 @@ function setup_lists(form, chart_fn, testing) {
         .attr("type", "button")
         .on("click", render);
 
-    render();
+    callbacks = render();
 
     function render() {
+        var cbs = null;
         var option = dd.property("value");
         if( option.slice(-3) == '.js' ) {
             if( testing ) {
                 var booklist = STATIC.map(book2node);
-                chart_fn(booklist);
+                cbs = chart_fn(booklist);
                 status("Loaded " + booklist.length + " books");
             } else {
                 d3.json("./Lists/" + option)
                     .on("progress", function () { status("Loading...") })
                     .on("load", function(books) {
                         var booklist = books.map(book2node);
-                        chart_fn(booklist);
+                        cbs = chart_fn(booklist);
                         status("Loaded " + books.length + " books");
                     })
                     .on("error", function(error) {
@@ -67,11 +68,13 @@ function setup_lists(form, chart_fn, testing) {
                 var booklist = d3.range(n).map(function(i) {
                     return book2node({ "dd": Math.random() * 1000, "title": "" });
                 });
-                chart_fn(booklist);
+                cbs = chart_fn(booklist);
             }
         }
+        return cbs;
     }
 
+    return callbacks;
 }
 
 function book2node_old(b) {
