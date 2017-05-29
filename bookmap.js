@@ -14,43 +14,69 @@ VORO_EXTENT = [[-WIDTH, -HEIGHT], [2 * WIDTH, 2 * HEIGHT]];
 
 // global var where the dynamic bookmap puts control callbacks
 
-var bookmap_controls = {};
+var ccb = {};
 
 // global colour parameters
 
-var cell_colour = {
-    'hue': 0,
-    'saturation': 0.5,
-    'luminance': 0.5,
-    'map': 'hue'
+var style = {
+    'cell': {
+        'hue': 0,
+        'saturation': 0.5,
+        'luminance': 0.5,
+        'mode': 'spectrum',
+        'blur': null
+    },
+    'node': {
+        'hue': 0,
+        'saturation': 0.8,
+        'luminance': 0.7,
+        'mode': 'spectrum',
+        'rmode': 'constant',
+        'blur': null,
+        'radius': 5,
+        'opacity': .8
+    }
+};
+
+
+
+function fill_colour(things, d) {
+    c = get_colour(d)
+    cs = style[things]
+    if( c ) {
+        s = cs.saturation;
+        if( cs.mode == 'monotone' ) {
+            h = cs.hue;
+            l = .5 + cs.luminance * c * 0.0005;
+        } else {
+            h = cs.hue + c * 0.36;
+            l = cs.luminance;
+        }
+        return d3.hsl(h, s, l).toString();
+    } else {
+        return "white"
+    }
 }
 
-bookmap_controls.hue = function(h) {
-    cell_colour.hue = h / 360;
-}
-
-
-function cell_fill(d) {
+function get_colour(d) {
     if( d.data ) {
-        return d3.hsl(0, 0, d.data.colour * 0.001).toString()
-    } else {
-        return "white"
+        return d.data.colour;
     }
-}
-
-
-function node_fill(d) {
     if( d.colour ) {
-       return d3.hsl(.36 * d.colour, 0, .8, .6).toString();
+        return d.colour;
+    }
+    return false;
+}
+
+
+function node_size(d) {
+    if( style.node.rmode == 'title' ) {
+        return d.label.length * 0.0075 * style.node.radius;
     } else {
-        return "white"
+        return style.node.radius;
     }
 }
 
-function node_size(d) { return d.label.length * 0.076 }
-
-
-// cell_fill function(d) { return d ? ( d.data ? d.data.cell_c : null ) : null;}
 
 
 
@@ -85,7 +111,7 @@ function bookmap_static(books) {
         .append("path")
         .attr("class", "cell")
         .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
-        .attr("fill", cell_fill)
+        .attr("fill", function(d) { fill_colour('cell', d) })
         .append("title")
         .text(function(d) { return d ? ( d.data ? d.data.label : "" ) :"" });
 
@@ -161,7 +187,7 @@ function bookmap_dynamic (books) {
         .enter()
         .append("path")
         .attr("class", "cell")
-        .attr("fill", cell_fill);
+        .attr("fill", function (d) { return fill_colour('cell', d) });
 
 
     polygons.append("title")
@@ -181,9 +207,12 @@ function bookmap_dynamic (books) {
         .data(simulation.nodes()).enter()
         .append("circle")
         .attr("class", "node")
-        .attr("fill", function (d) { return node_fill(books[d.index])})
-        .attr("r", function (d) { return node_size(books[d.index])});
+        .attr("fill", function (d) { return fill_colour('node', books[d.index])})
+        .attr("r", function (d) { return node_size(books[d.index])})
+        .attr("opacity", function (d) { return style.node.opacity });
 
+    set_blur('node', style.node.blur);
+    set_blur('cell', style.cell.blur);
 
     polygons.call(d3.drag()
                   .on("start", dragstarted)
@@ -195,23 +224,30 @@ function bookmap_dynamic (books) {
 
     // callbacks to be driven by the controls
 
-    bookmap_controls.charge = function (charge) {
-        console.log("Setting charge to " + charge);
-        simulation.force("charge").strength(-charge);
+    ccb = function(thing, parameter, value) {
+        style[thing][parameter] = value;
+        if( parameter == 'blur') {
+            set_blur(thing, value);
+        } else if( thing == 'node') {
+            if( parameter == 'rmode' || parameter == 'radius') {
+                console.log("Setting node radius");
+                nodes.attr('r', function (d) { return node_size(d); });
+            } else if ( parameter == 'opacity') {
+                nodes.attr('opacity', function (d) { return style.node.opacity });
+            } else {
+                nodes.attr('fill', function (d) { return fill_colour('node', d)});
+            }
+        } else {
+            d3.selectAll('path')
+                .attr('fill', function (d) { return fill_colour('cell', d)});
+        }
     };
 
-    bookmap_controls.alpha = function (alpha) {
-        console.log("Setting alpha to " + alpha);
-        simulation.alphaDecay(alpha);
-        simulation.restart();
-    };
-
-    bookmap_controls.velocity = function (velocity) {
-        console.log("Setting velocity to " + velocity);
-        simulation.velocityDecay(velocity);
-        simulation.restart();
-    };
-
+    function set_blur(thing, b) {
+        var blur = b > 0 ? `blur(${b})` : null;
+        var s = ( thing == 'node' ) ? 'nodes' : 'polygons';
+        d3.select('.' + s).attr('filter', blur);
+    }
 
 
     simulation.on("tick", function () {
@@ -229,7 +265,7 @@ function bookmap_dynamic (books) {
         nodes.attr("cx", function(d) { return d.x })
              .attr("cy", function(d) { return d.y });
 
-        d3.select("path").attr("fill", function(d) { console.log("HI"); return "white"});
+
 
     });
 
@@ -250,7 +286,7 @@ function bookmap_dynamic (books) {
         d.data.fx = null;
         d.data.fy = null;
     }
-
+    return ccb;
 }
 
 

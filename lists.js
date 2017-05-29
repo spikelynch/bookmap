@@ -11,6 +11,12 @@ LISTS = [
     { label: "random 1000", file: "1000" },
 ];
 
+TLISTS = [
+    { label: "atomic", file: "atomic.js" },
+    { label: "random 200", file: "200" },
+    { label: "random 1000", file: "1000" },
+];
+
 WORD_JITTER = 1;
 EXTRA_JITTER = 0.02;
 JITTER = 10;
@@ -18,48 +24,57 @@ JITTER = 10;
 
 
 
-function setup_lists(chart_fn) {
+function setup_lists(form, chart_fn, testing) {
 
-    var dd = d3.select("form").append("select").attr("id", "listmenu");
+    var dd = form.append("select").attr("id", "listmenu");
+    var lists = testing ? TLISTS : LISTS;
     var options = dd
         .selectAll('option')
-        .data(LISTS).enter()
+        .data(lists).enter()
         .append('option')
         .attr('value', function (d) { return d.file; })
         .text(function(d) { return d.label; });
 
-    var input = d3.select("form")
-        .append("input")
+    var input = form.append("input")
         .attr("value", "Render")
         .attr("type", "button")
         .on("click", render);
 
-    render();
+    callbacks = render();
 
     function render() {
+        var cbs = null;
         var option = dd.property("value");
         if( option.slice(-3) == '.js' ) {
-            d3.json("./Lists/" + option)
-                .on("progress", function () { status("Loading...") })
-                .on("load", function(books) {
-                    var booklist = books.map(book2node);
-                    chart_fn(booklist);
-                    status("Loaded " + books.length + " books");
-                })
-                .on("error", function(error) {
-                    status("Error: ", error);
-                }).get();
+            if( testing ) {
+                var booklist = STATIC.map(book2node);
+                cbs = chart_fn(booklist);
+                status("Loaded " + booklist.length + " books");
+            } else {
+                d3.json("./Lists/" + option)
+                    .on("progress", function () { status("Loading...") })
+                    .on("load", function(books) {
+                        var booklist = books.map(book2node);
+                        cbs = chart_fn(booklist);
+                        status("Loaded " + books.length + " books");
+                    })
+                    .on("error", function(error) {
+                        status("Error: ", error);
+                    }).get();
+            }
         } else {
             var n = parseInt(option);
             if( n ) {
                 var booklist = d3.range(n).map(function(i) {
                     return book2node({ "dd": Math.random() * 1000, "title": "" });
                 });
-                chart_fn(booklist);
+                cbs = chart_fn(booklist);
             }
         }
+        return cbs;
     }
 
+    return callbacks;
 }
 
 function book2node_old(b) {
