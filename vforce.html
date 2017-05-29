@@ -44,8 +44,8 @@ var csvg = d3.select("#controls").append("svg")
 
 function colour_ctrls(cb, i, target) {
     make_select(csvg, i, target, [ "spectrum", "monotone" ], function(v) {
-        console.log("mode");
-        cb(target, 'mode', v) } );
+        console.log("mode " + target + " " + v);
+        ccb(target, 'mode', v) } );
     make_slider(csvg, i+1, "Hue", [ 0, 360 ], style[target].hue, function(d) { ccb(target, 'hue', d) });
     make_slider(csvg, i+2, "Sat", [ 0, 1 ], style[target].saturation, function(d) { ccb(target, 'saturation', d) });
     make_slider(csvg, i+3, "Lum", [ 0, 1 ], style[target].luminance, function(d) { ccb(target, 'luminance', d) });
