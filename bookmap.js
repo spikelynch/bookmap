@@ -153,16 +153,24 @@ function bookmap_dynamic (books) {
     vpolygons = voronoi_start.polygons(books);
     vlinks = voronoi_start.links(books);
 
+    // generate an array of static link distances
 
+    linkd = vlinks.map(function(link) {
+        var xx = link.source.x - link.target.x;
+        var yy = link.source.y - link.target.y;
+        return Math.sqrt(xx * xx + yy * yy) * 0.5;
+    });
 
     var simulation = d3.forceSimulation()
-        .force("links", d3.forceLink().iterations(1))
+        .force("links", d3.forceLink().iterations(8))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(WIDTH / 2, HEIGHT / 2));
 
     simulation.velocityDecay(0.1);
     simulation.nodes(books);
-    simulation.force("links").links(vlinks);
+    simulation.force("links")
+        .links(vlinks)
+        .distance(function(l, i){console.log(i); return linkd[i];});
     simulation.force("charge").strength(-CHARGE / books.length);
 
 

@@ -37,3 +37,10 @@ updated live with a control
 
 Almost all of this should be done with stylesheets - the exception is circle
 radius
+
+# Meeting 30/5
+
+- sliders for layout, physics, gravity etc
+- controls for the style sheet values
+- "pinning" nodes
+- list of records in the controls pane
